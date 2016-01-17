@@ -1,9 +1,12 @@
+var log = console.log;
+
 var Board = function(height, width) {
   this._board = new Array(height*width);
   this.height = height;
   this.width = width;
   this.posToIndex = function(x,y) {
-    return width*(x - 1) + height * (y - 1); 
+    return width  * (x - 1) + 
+           height * (y - 1); 
   }
 };
 
@@ -14,7 +17,11 @@ Board.prototype.get = function(position) {
   return this._board[targetIndex]; 
 };
 
-Board.prototype.set = function() {
+Board.prototype.set = function(obj, position) {
+  var x = position[0];
+  var y = position[1];
+  var targetIndex = this.posToIndex(x,y);
+  this._board[targetIndex] = obj; 
 
 };
 
@@ -35,8 +42,7 @@ function RuleEngine(board) {
   
 }
 
-var log = console.log;
 
 var board = new Board(8,8);
-board._board[0] = 'test';
-log(board.get([1,1]));
+board.set({name:'pawn'}, [8,8]);
+log(board.get([8,8]));
