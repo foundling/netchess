@@ -37,7 +37,17 @@ var RuleEngine = function() {
         // is the absolute change in x the same as the absolute change in y?
         return deltaX === deltaY;
       },
+    },
+    king: {
+      oneSpace: function(startPos, endPos) {
+        var deltaX = Math.abs(startPos[0] - endPos[0]);
+        var deltaY = Math.abs(startPos[1] - endPos[1]);
+        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));       
+        console.log(deltaX,deltaY,hypotenuse);
+        return (hypotenuse === 1) || (hypotenuse === Math.sqrt(2));
+      },
     }
+
   };
 };
 
@@ -89,4 +99,8 @@ var ruleEngine = new RuleEngine();
 //log(ruleEngine.validators.knight.lShape([0,0],[1,2]));
 //log(ruleEngine.validators.knight.lShape([1,2],[2,1]));
 //log('straight line: ',ruleEngine.validators.queen.straightLine([1,2],[2,2]));
-log('diagonal: ',ruleEngine.validators.queen.diagonal([1,3],[5,7]));
+log('queen diagonal: ',ruleEngine.validators.queen.diagonal([1,3],[5,7]));
+log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[2,2]));
+log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[2,5]));
+log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[2,3]));
+log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[1,2]));
