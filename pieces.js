@@ -14,7 +14,7 @@ var Piece = function(name, position){
 // ruleEngine: lays down the possible moves for each piece
 var RuleEngine = function() {
   this.validators = {
-    knight : {
+    knight: {
       lShape: function(startPos, endPos) {
         var deltaX = Math.abs(endPos[0] - startPos[0]);
         var deltaY = Math.abs(endPos[1] - startPos[1]);
@@ -22,6 +22,22 @@ var RuleEngine = function() {
         return hypotenuse === Math.sqrt(5);
       }
     },
+    queen: {
+      straightLine: function(startPos, endPos) {
+        var startX = startPos[0];
+        var startY = startPos[1];
+        var endX = endPos[0];
+        var endY = endPos[1];
+        // do either the x coords or y coords remain the same? 
+        return  (startX === endX) || (startY === endY);  
+      },
+      diagonal: function(startPos, endPos) {
+        var deltaX = Math.abs(endPos[0] - startPos[0]);
+        var deltaY = Math.abs(endPos[1] - startPos[1]);
+        // is the absolute change in x the same as the absolute change in y?
+        return deltaX === deltaY;
+      },
+    }
   };
 };
 
@@ -70,5 +86,7 @@ Piece.prototype.next = function() {
 //board.set({name:'pawn'}, [8,8]);
 //log(board.get([8,8]));
 var ruleEngine = new RuleEngine();
-log(ruleEngine.validators.knight.lShape([0,0],[1,2]));
-log(ruleEngine.validators.knight.lShape([1,2],[2,1]));
+//log(ruleEngine.validators.knight.lShape([0,0],[1,2]));
+//log(ruleEngine.validators.knight.lShape([1,2],[2,1]));
+//log('straight line: ',ruleEngine.validators.queen.straightLine([1,2],[2,2]));
+log('diagonal: ',ruleEngine.validators.queen.diagonal([1,3],[5,7]));
