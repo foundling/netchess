@@ -3,20 +3,20 @@ var log = console.log;
 
 // pieces 
 var Piece = function(name, position){
-  if ( 
-      [
+  var validNames = [
         'pawn',
         'king',
         'queen',
         'bishop',
         'knight',
         'rook'
-      ]
-      .some(function(aValidName){ 
+  ];
+  if (validNames.some(function(aValidName){ 
         return name === aValidName; 
-      })
-  ) {
-
+      }).length) {
+  console.log(validNames.some(function(aValidName){ 
+        return name === aValidName; 
+      }).length);
     this.name = name;
     this.position = position;
     this.alive = true;
@@ -75,14 +75,64 @@ var GameEngine = function() {
 };
 
 var Board = function(height, width) {
-  this._board = new Array(height*width);
+  this._board = new Array(height * width);
   this.height = height;
   this.width = width;
+  this.pieceLocations = {
+        'pawn' : [
+            [1,2],
+            [2,2],
+            [3,2],
+            [4,2],
+            [5,2],
+            [6,2],
+            [7,2],
+            [8,2],
+          ],
+          'king': [
+            [4,1],
+          ],
+          'queen': [
+            [5,1],
+          ],
+          'knight': [
+            [2,1],
+            [7,1],
+          ],
+          'bishop': [
+            [3,1],
+            [6,1],
+          ],
+          'rook': [
+            [1,1],
+            [8,1],
+          ]
+  }; 
+
+};
+
+
+Board.prototype.SetPiece = function(piece) {
+  this.pieceLocations[piece.name].forEach(function(loc) {
+      //loc is a coordinate pair
+      //
+      //NOTE: you need to use the Boards getter/setter bc you wrote that to simplify the 1 offset 
+    var x = loc[0],y = loc[1];
+    if (this._board[x][y]) {
+      console.log('There is already a piece here. Fail');
+      return false;
+    } else {
+      this._board[x][y] = Piece; 
+    }
+          
+  });
 };
 
 Board.prototype.toString = function() {
+  var lineBreak = (i % this._board.width === 0) ? '\n' : '';
+
   for (var i = 0; i < this._board.length; i++) {
-    console.log(i);    
+      console.log('| %s | %s', this._board[i],lineBreak);
   }    
 };
 
@@ -117,3 +167,5 @@ module.exports = exports = {
   GameEngine: GameEngine,
   RuleEngine: RuleEngine
 };
+
+var x = new Piece('xyz',[0,0]);

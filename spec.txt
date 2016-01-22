@@ -1,0 +1,13 @@
+the aims of this project:
+
+a lan-restricted website running a multi-user chess game platform with a decent UI.
+
+the server supports the following features:
+
+  - a bug tracker built into the ui.
+
+  - it saves your state for x number of days.
+
+stack:
+
+sqlite, node, RxJS, HTML, CSS, LESS/SASS
