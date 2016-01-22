@@ -3,12 +3,30 @@ var log = console.log;
 
 // pieces 
 var Piece = function(name, position){
-  this.name = name;
-  this.position = position;
-  this.alive = true;
-  this.next = function() {
-    // use rule engine to get next possible moves
-  };
+  if ( 
+      [
+        'pawn',
+        'king',
+        'queen',
+        'bishop',
+        'knight',
+        'rook'
+      ]
+      .some(function(aValidName){ 
+        return name === aValidName; 
+      })
+  ) {
+
+    this.name = name;
+    this.position = position;
+    this.alive = true;
+    this.next = function() {
+    };
+
+  } else {
+    console.log('INCORRECT INVOCATION OF PIECE CONSTRUCTOR');
+    throw 'FUNC_INVError';     
+  }
 }; 
 
 // ruleEngine: lays down the possible moves for each piece
@@ -62,11 +80,10 @@ var Board = function(height, width) {
   this.width = width;
 };
 
-Board.prototype.posToIndex = function(position) {
-  var x = position[0];
-  var y = position[1];
-  return this.width  * (x - 1) + 
-         this.height * (y - 1); 
+Board.prototype.toString = function() {
+  for (var i = 0; i < this._board.length; i++) {
+    console.log(i);    
+  }    
 };
 
 Board.prototype.get = function(position) {
@@ -92,15 +109,11 @@ Piece.prototype.next = function() {
   return this.ruleEngine.getPossibleMoves(this.name, this.position);
 };
 
-//var board = new Board(8,8);
-//board.set({name:'pawn'}, [8,8]);
-//log(board.get([8,8]));
 var ruleEngine = new RuleEngine();
-//log(ruleEngine.validators.knight.lShape([0,0],[1,2]));
-//log(ruleEngine.validators.knight.lShape([1,2],[2,1]));
-//log('straight line: ',ruleEngine.validators.queen.straightLine([1,2],[2,2]));
-log('queen diagonal: ',ruleEngine.validators.queen.diagonal([1,3],[5,7]));
-log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[2,2]));
-log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[2,5]));
-log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[2,3]));
-log('king diagonal: ',ruleEngine.validators.king.oneSpace([1,3],[1,2]));
+
+module.exports = exports = {
+  Board: Board, 
+  Piece: Piece,
+  GameEngine: GameEngine,
+  RuleEngine: RuleEngine
+};
