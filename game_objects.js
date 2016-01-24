@@ -3,35 +3,33 @@ var log = console.log;
 
 // pieces 
 var Piece = function(name, position){
-  var validNames = [
-        'pawn',
-        'king',
-        'queen',
-        'bishop',
-        'knight',
-        'rook'
-  ];
-  if (validNames.some(function(aValidName){ 
-        return name === aValidName; 
-      }).length) {
-  console.log(validNames.some(function(aValidName){ 
-        return name === aValidName; 
-      }).length);
-    this.name = name;
-    this.position = position;
-    this.alive = true;
-    this.next = function() {
-    };
 
-  } else {
-    console.log('INCORRECT INVOCATION OF PIECE CONSTRUCTOR');
-    throw 'FUNC_INVError';     
-  }
+  this.name = name;
+  this.position = position;
+  this.alive = true;
+  this.next = function() {};
 }; 
 
 // ruleEngine: lays down the possible moves for each piece
 var RuleEngine = function() {
   this.validators = {
+    pawn: {
+      single: function(startPos, endPos) {
+        var deltaX = endPos[0] - startPos[0];  
+        var deltaY = endPos[1] - startPos[1];
+        return deltaX === 0 && deltaY === 1;
+      },
+      doubleStart: function(startPos, endPos) {
+        var deltaX = endPos[0] - startPos[0];  
+        var deltaY = endPos[1] - startPos[1];
+        return deltaX === 0 && deltaY === 2;
+      },
+      capture: function(startPos, endPos) {
+        var deltaX = endPos[0] - startPos[0];  
+        var deltaY = endPos[1] - startPos[1];
+        return Math.abs(deltaX === 1) && deltaY === 1;
+      }
+    },
     knight: {
       lShape: function(startPos, endPos) {
         var deltaX = Math.abs(endPos[0] - startPos[0]);
@@ -112,7 +110,7 @@ var Board = function(height, width) {
 };
 
 
-Board.prototype.SetPiece = function(piece) {
+Board.prototype.setPiece = function(piece) {
   this.pieceLocations[piece.name].forEach(function(loc) {
       //loc is a coordinate pair
       //
@@ -161,11 +159,33 @@ Piece.prototype.next = function() {
 
 var ruleEngine = new RuleEngine();
 
+var Player = function(side, board) {
+
+  this.side = side;
+  this._board = board;
+  this.pieces = {
+    pawn:   8,   
+    king:   1,
+    queen:  1,
+    bishop: 2,
+    knight: 2,
+    rook:   2,
+  };
+
+  for (var piece in this.pieces) {
+    for (var i = this.pieces[piece]; i > 0; i--) {
+
+    }
+  }
+
+};
+
+
+
 module.exports = exports = {
   Board: Board, 
   Piece: Piece,
+  Player: Player, 
   GameEngine: GameEngine,
   RuleEngine: RuleEngine
 };
-
-var x = new Piece('xyz',[0,0]);
