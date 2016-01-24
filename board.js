@@ -1,3 +1,4 @@
+'use strict';
 var util = require('util');
 var Piece = require('./piece');
 
@@ -93,17 +94,23 @@ Board.prototype.indexToPos = function(index) {
 
 Board.prototype.toString = function() {
   var toString = '',
-      line='\n|---------------------------------\n',
+      line='\n|-------------------------------|\n',
+      lineEnd = '|',
       i,
       pieceName;
 
   for (i = 0; i < this._board.length; i++) {
+    if ( i !== 0 && i%this.width === 0) {
+      toString += lineEnd;
+    }
     if (i%this.width === 0) {
       toString += line;
     }
     var piece = this._board[i];
     toString += util.format('| %s ', (piece) ? piece.name[0] : ' ');
   } 
+  toString += lineEnd;
+  toString += line;
   return toString;
 };
 

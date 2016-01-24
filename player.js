@@ -1,3 +1,5 @@
+'use strict';
+
 var Player = function(side, board) {
 
   this.side = side;

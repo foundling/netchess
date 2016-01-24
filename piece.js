@@ -1,3 +1,5 @@
+'use strict';
+
 var Piece = function(name, position){
 
   this.name = name;
