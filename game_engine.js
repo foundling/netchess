@@ -71,6 +71,8 @@ var RuleEngine = function() {
 
 // gameEngine
 var GameEngine = function(board, player1, player2) {
+  // duties:  
+  // handle turns, ref the game (mark players dead, determine checkmate, reverse board on each turn)
 
   this.ruleEngine = new RuleEngine();
   this.board = board;
