@@ -71,6 +71,7 @@ var RuleEngine = function() {
 
 // gameEngine
 var GameEngine = function() {
+  this.ruleEngine = new RuleEngine();
 };
 
-module.exports = exports = Engine;
+module.exports = exports = GameEngine;
