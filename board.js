@@ -1,4 +1,5 @@
 var util = require('util');
+var Piece = require('./piece');
 
 var Board = function(height, width) {
   this._board = new Array(height * width);
@@ -40,15 +41,17 @@ var Board = function(height, width) {
 Board.prototype.setPiece = function(piece) {
   // get piece location data
   // write a new piece to the board at that location 
-  var x = piece.position[0],
-      y = piece.position[1];
-  this._board[x][y] = piece;
+  
+  var index = this.posToIndex(piece.position);
+  this._board[index] = piece;
 };
 
+
 Board.prototype.getPiece = function(loc) {
-  var index = this.locToIndex(loc);
+  var index = this.posToIndex(loc);
   return this._board[index];
 };
+
 
 Board.prototype.initBoard = function() {
   // for each type of piece
@@ -59,9 +62,10 @@ Board.prototype.initBoard = function() {
       piece;
 
   for (var pieceName in this.pieceLocations) {
-    var locationList = piecelocations[piecename];
+    var locationList = this.pieceLocations[pieceName];
     for (i = 0; i < locationList.length; i++) {
       piece = new Piece(pieceName, locationList[i]);
+      console.log(piece);
       this.setPiece(piece);
     }
   }
@@ -97,7 +101,8 @@ Board.prototype.toString = function() {
     if (i%this.width === 0) {
       toString += line;
     }
-    toString += util.format('| %s ','x');
+    var piece = this._board[i];
+    toString += util.format('| %s ', (piece) ? piece.name[0] : ' ');
   } 
   return toString;
 };
