@@ -73,7 +73,7 @@ Board.prototype.posToIndex = function(pos) {
       y = pos[1],
       w = this.width;
 
-  return (((y - 1) * (w + x)) - 1);
+  return (((y - 1) * w) + x) - 1;
 };
 
 Board.prototype.indexToPos = function(index) {
