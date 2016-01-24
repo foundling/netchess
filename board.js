@@ -11,9 +11,6 @@ var Board = function(height, width) {
 };
 
 Board.prototype.setPiece = function(piece) {
-  // get piece location data
-  // write a new piece to the board at that location 
-  
   var index = this.posToIndex(piece.position);
   this._board[index] = piece;
 };
@@ -41,7 +38,6 @@ Board.prototype.initBoard = function() {
       }
     }
   }
- 
 };
 
 Board.prototype.posToIndex = function(pos) {
@@ -53,8 +49,6 @@ Board.prototype.posToIndex = function(pos) {
 };
 
 Board.prototype.indexToPos = function(index) {
-  // check this again
-  // they don't work
   var x,
       y;
 
