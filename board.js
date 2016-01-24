@@ -1,69 +1,8 @@
 'use strict';
+
 var util = require('util');
 var Piece = require('./piece');
-
-var pieceLocations = {
-  'far' : {
-        'pawn' : [
-            [1,2],
-            [2,2],
-            [3,2],
-            [4,2],
-            [5,2],
-            [6,2],
-            [7,2],
-            [8,2],
-          ],
-          'king': [
-            [4,1],
-          ],
-          'queen': [
-            [5,1],
-          ],
-          'knight': [
-            [2,1],
-            [7,1],
-          ],
-          'bishop': [
-            [3,1],
-            [6,1],
-          ],
-          'rook': [
-            [1,1],
-            [8,1],
-          ]
-  },
-  'near' : {
-        'pawn' : [
-            [1,7],
-            [2,7],
-            [3,7],
-            [4,7],
-            [5,7],
-            [6,7],
-            [7,7],
-            [8,7],
-          ],
-          'king': [
-            [4,8],
-          ],
-          'queen': [
-            [5,8],
-          ],
-          'knight': [
-            [2,8],
-            [7,8],
-          ],
-          'bishop': [
-            [3,8],
-            [6,8],
-          ],
-          'rook': [
-            [1,8],
-            [8,8],
-          ]
-  }
-};
+var pieceLocations = require('./pieceLocations');
 
 var Board = function(height, width) {
   this._board = new Array(height * width);
@@ -94,7 +33,6 @@ Board.prototype.initBoard = function() {
       locations;
 
   for (playerBoardSide in pieceLocations) {
-    console.log(playerBoardSide);
     for (pieceName in pieceLocations[playerBoardSide]) {
       locations = pieceLocations[playerBoardSide][pieceName];
       for (i = 0; i < locations.length; i++) {
