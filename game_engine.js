@@ -70,8 +70,23 @@ var RuleEngine = function() {
 };
 
 // gameEngine
-var GameEngine = function() {
+var GameEngine = function(board, player1, player2) {
+
   this.ruleEngine = new RuleEngine();
+  this.board = board;
+
+  this.initBoard = function() {
+      this.board.initBoard();
+  };
+
+  this.rotateBoard = function() {
+
+  };
+
+  this.nextMove = function() {
+
+  };
+
 };
 
 module.exports = exports = GameEngine;

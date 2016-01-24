@@ -1,3 +1,5 @@
+var util = require('util');
+
 var Board = function(height, width) {
   this._board = new Array(height * width);
   this.height = height;
@@ -35,40 +37,69 @@ var Board = function(height, width) {
 
 };
 
-
 Board.prototype.setPiece = function(piece) {
-  this.pieceLocations[piece.name].forEach(function(loc) {
-      //loc is a coordinate pair
-      //
-      //NOTE: you need to use the Boards getter/setter bc you wrote that to simplify the 1 offset 
-    var x = loc[0],y = loc[1];
-    if (this._board[x][y]) {
-      console.log('There is already a piece here. Fail');
-      return false;
-    } else {
-      this._board[x][y] = Piece; 
+  // get piece location data
+  // write a new piece to the board at that location 
+  var x = piece.position[0],
+      y = piece.position[1];
+  this._board[x][y] = piece;
+};
+
+Board.prototype.getPiece = function(loc) {
+  var index = this.locToIndex(loc);
+  return this._board[index];
+};
+
+Board.prototype.initBoard = function() {
+  // for each type of piece
+  // get the array of coordinates
+  // loop through and create a new piece with those coordinates
+  // call set piece on that to install it at the proper location
+  var i = 0,
+      piece;
+
+  for (var pieceName in this.pieceLocations) {
+    var locationList = piecelocations[piecename];
+    for (i = 0; i < locationList.length; i++) {
+      piece = new Piece(pieceName, locationList[i]);
+      this.setPiece(piece);
     }
-          
-  });
+  }
+ 
+};
+
+Board.prototype.posToIndex = function(pos) {
+  var x = pos[0],
+      y = pos[1],
+      w = this.width;
+
+  return (((y - 1) * (w + x)) - 1);
+};
+
+Board.prototype.indexToPos = function(index) {
+  // check this again
+  // they don't work
+  var x,
+      y;
+
+  y = Math.floor(index/this.width) + 1;
+  x = (index % this.width) + 1;
+  return [x,y];
 };
 
 Board.prototype.toString = function() {
-  var lineBreak = (i % this._board.width === 0) ? '\n' : '';
+  var toString = '',
+      line='\n|---------------------------------\n',
+      i,
+      pieceName;
 
-  for (var i = 0; i < this._board.length; i++) {
-      console.log('| %s | %s', this._board[i],lineBreak);
-  }    
+  for (i = 0; i < this._board.length; i++) {
+    if (i%this.width === 0) {
+      toString += line;
+    }
+    toString += util.format('| %s ','x');
+  } 
+  return toString;
 };
-
-Board.prototype.get = function(position) {
-  var targetIndex = this.posToIndex(position);
-  return this._board[targetIndex]; 
-};
-
-Board.prototype.set = function(obj, position) {
-  var targetIndex = this.posToIndex(position);
-  this._board[targetIndex] = obj; 
-};
-
 
 module.exports = exports = Board; 
