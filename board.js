@@ -2,11 +2,8 @@
 var util = require('util');
 var Piece = require('./piece');
 
-var Board = function(height, width) {
-  this._board = new Array(height * width);
-  this.height = height;
-  this.width = width;
-  this.pieceLocations = {
+var pieceLocations = {
+  'far' : {
         'pawn' : [
             [1,2],
             [2,2],
@@ -35,8 +32,43 @@ var Board = function(height, width) {
             [1,1],
             [8,1],
           ]
-  }; 
+  },
+  'near' : {
+        'pawn' : [
+            [1,7],
+            [2,7],
+            [3,7],
+            [4,7],
+            [5,7],
+            [6,7],
+            [7,7],
+            [8,7],
+          ],
+          'king': [
+            [4,8],
+          ],
+          'queen': [
+            [5,8],
+          ],
+          'knight': [
+            [2,8],
+            [7,8],
+          ],
+          'bishop': [
+            [3,8],
+            [6,8],
+          ],
+          'rook': [
+            [1,8],
+            [8,8],
+          ]
+  }
+};
 
+var Board = function(height, width) {
+  this._board = new Array(height * width);
+  this.height = height;
+  this.width = width;
 };
 
 Board.prototype.setPiece = function(piece) {
@@ -55,19 +87,20 @@ Board.prototype.getPiece = function(loc) {
 
 
 Board.prototype.initBoard = function() {
-  // for each type of piece
-  // get the array of coordinates
-  // loop through and create a new piece with those coordinates
-  // call set piece on that to install it at the proper location
   var i = 0,
-      piece;
+      piece,
+      playerBoardSide,
+      pieceName,
+      locations;
 
-  for (var pieceName in this.pieceLocations) {
-    var locationList = this.pieceLocations[pieceName];
-    for (i = 0; i < locationList.length; i++) {
-      piece = new Piece(pieceName, locationList[i]);
-      console.log(piece);
-      this.setPiece(piece);
+  for (playerBoardSide in pieceLocations) {
+    console.log(playerBoardSide);
+    for (pieceName in pieceLocations[playerBoardSide]) {
+      locations = pieceLocations[playerBoardSide][pieceName];
+      for (i = 0; i < locations.length; i++) {
+        piece = new Piece(pieceName, locations[i]);
+        this.setPiece(piece);
+      }
     }
   }
  
