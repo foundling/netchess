@@ -13,12 +13,13 @@ var GameEngine = function(board, player1, player2) {
 
   this.ruleEngine = new RuleEngine();
   this.board = board;
+};
 
-  this.setup = function() {
+GameEngine.prototype.setup = function() {
       this.board.initBoard();
-  };
+};
 
-  this.getNextMove = function() {
+GameEngine.prototype.getNextMove = function() {
     var move,
         start,
         end;
@@ -31,21 +32,19 @@ var GameEngine = function(board, player1, player2) {
       end = move[1];
       this.refreshDisplay();
     }.bind(this));
-  };
+};
 
-  this.refreshDisplay = function() {
-    console.log(board.toString());
-    process.stdout.write(this.gameState.whoseMove + ': ');
-    this.getNextMove(); 
-    this.gameState.whoseMove = (this.gameState.whoseMove === 'player1') ? 'player2' : 'player1';
-  };
+GameEngine.prototype.refreshDisplay = function() {
+  console.log(this.board.toString());
+  process.stdout.write(this.gameState.whoseMove + ': ');
+  this.getNextMove(); 
+  this.gameState.whoseMove = (this.gameState.whoseMove === 'player1') ? 'player2' : 'player1';
+};
 
-  this.mainLoop = function() {
-    while (!this.gameState.gameOver) {
-      this.refreshDisplay();
-    }
-  };
-  
+GameEngine.prototype.mainLoop = function() {
+  while (!this.gameState.gameOver) {
+    this.refreshDisplay();
+  }
 };
 
 module.exports = exports = GameEngine;
