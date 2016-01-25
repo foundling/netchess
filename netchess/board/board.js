@@ -22,7 +22,7 @@ Board.prototype.getPiece = function(loc) {
 };
 
 
-Board.prototype.initBoard = function() {
+Board.prototype.init = function() {
   var i = 0,
       piece,
       playerBoardSide,

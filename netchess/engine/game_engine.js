@@ -9,6 +9,11 @@ var GameEngine = function(board, player1, player2) {
   this.gameState = {
     whoseMove: player1.name,    
     gameOver: false,
+    currentMove: {
+      'from': null,
+      'to': null
+    },
+    total : 0,
   };
 
   this.ruleEngine = new RuleEngine();
@@ -20,31 +25,30 @@ GameEngine.prototype.setup = function() {
 };
 
 GameEngine.prototype.getNextMove = function() {
-    var move,
-        start,
-        end;
-
-    var that = this;
+    process.stdout.write(this.gameState.whoseMove + ': ');
     process.stdin.once('data', function(data) {
-      //nput:  1,2 1,3
-      move = data.toString().split(' ');
-      start = move[0];
-      end = move[1];
-      this.refreshDisplay();
+      var move,
+          from,
+          to;
+
+      move = data.toString().split(' '); //input sample:  1,2 1,3
+      from = move[0];
+      to = move[1];
+      this.gameState.currentMove = { from: from, to: to }; 
+      this.mainLoop();
     }.bind(this));
 };
 
 GameEngine.prototype.refreshDisplay = function() {
+  this.gameState.total++;
   console.log(this.board.toString());
-  process.stdout.write(this.gameState.whoseMove + ': ');
-  this.getNextMove(); 
   this.gameState.whoseMove = (this.gameState.whoseMove === 'player1') ? 'player2' : 'player1';
 };
 
 GameEngine.prototype.mainLoop = function() {
-  while (!this.gameState.gameOver) {
-    this.refreshDisplay();
-  }
+  if (this.gameState.total == 5) /*this.gameOver)*/ process.exit();
+  this.refreshDisplay();
+  this.getNextMove();
 };
 
 module.exports = exports = GameEngine;
