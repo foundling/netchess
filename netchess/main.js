@@ -1,9 +1,9 @@
 'use strict';
 
-var Piece = require('./piece');
-var Player = require('./player');
-var Board = require('./board');
-var GameEngine = require('./game_engine');
+var Piece = require('./piece/piece');
+var Player = require('./player/player');
+var Board = require('./board/board');
+var GameEngine = require('./engine/game_engine');
 
 var board = new Board(8,8);
 var player1 = new Player('player1','near',board);

@@ -1,3 +1,3 @@
 'use strict';
 
-var app = require('./main');
+var app = require('./netchess/main');

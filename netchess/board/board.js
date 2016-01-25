@@ -1,8 +1,8 @@
 'use strict';
 
 var util = require('util');
-var Piece = require('./piece');
-var pieceLocations = require('./pieceLocations');
+var Piece = require('./../piece/piece');
+var pieceLocations = require('../piece/pieceLocations');
 
 var Board = function(height, width) {
   this._board = new Array(height * width);
