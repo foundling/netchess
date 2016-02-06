@@ -1,0 +1,32 @@
+{
+  "name": "netchess",
+  "version": "1.0.0",
+  "description": "network chess game",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "chai": "^3.5.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/foundling/netchess"
+  },
+  "keywords": [
+    "chess",
+    "javascript"
+  ],
+  "author": "Alex Ramsdell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/foundling/netchess/issues"
+  },
+  "homepage": "https://github.com/foundling/netchess"
+}
