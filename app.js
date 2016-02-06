@@ -2,3 +2,4 @@
 
 var app = require('./netchess/main');
 app.run();
+console.log('test');

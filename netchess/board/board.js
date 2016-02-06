@@ -19,7 +19,6 @@ Board.prototype.setPiece = function(piece) {
 
 };
 
-
 Board.prototype.getPiece = function(position) {
   var x = position[0],
       y = position[1];

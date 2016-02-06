@@ -3,6 +3,7 @@ how is a player in check prevented from moving in a way that doesn't prevent che
 how is checkmate determined?
 how is a move determined to be valid?
 
+game engine calls 
 Board
 
 - height, width
@@ -28,12 +29,15 @@ Rules
 Player
 
 - name
-- next function that lets the player modify the board a single time
+- next function is the api for the game engine, lets the player move once
+- next calls move, an internal function on player 
+- move gets user input for which piece to move where.
 - inCheck state variable
 
 Game Engine
 
 - starts the game
+- alternates between player moves, calling .next() on each player
 
 pieces have a name, specific list of move vectors, and a state object that keeps track of certain nuanced state things.
 
