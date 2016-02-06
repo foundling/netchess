@@ -1,82 +1,30 @@
 'use strict';
 
-var util = require('util');
-var Piece = require('./../piece/piece');
-var pieceLocations = require('../piece/pieceLocations');
-
 var Board = function(height, width) {
-  this._board = new Array(height * width);
+
+  this._board = new Array(height);
+  for (var i = 0; i < height; i++) {
+    this._board[i] = new Array(width);
+  }
   this.height = height;
   this.width = width;
 };
 
 Board.prototype.setPiece = function(piece) {
-  var index = this.posToIndex(piece.position);
-  this._board[index] = piece;
+
+  var x = piece.position[0],
+      y = piece.position[1];
+
+  this._board[x][y] = piece;
+
 };
 
 
-Board.prototype.getPiece = function(loc) {
-  var index = this.posToIndex(loc);
-  return this._board[index];
+Board.prototype.getPiece = function(position) {
+  var x = position[0],
+      y = position[1];
+
+  return this._board[x][y];    
 };
 
-
-Board.prototype.init = function() {
-  var i = 0,
-      piece,
-      playerBoardSide,
-      pieceName,
-      locations;
-
-  for (playerBoardSide in pieceLocations) {
-    for (pieceName in pieceLocations[playerBoardSide]) {
-      locations = pieceLocations[playerBoardSide][pieceName];
-      for (i = 0; i < locations.length; i++) {
-        piece = new Piece(pieceName, locations[i]);
-        this.setPiece(piece);
-      }
-    }
-  }
-};
-
-Board.prototype.posToIndex = function(pos) {
-  var x = pos[0],
-      y = pos[1],
-      w = this.width;
-
-  return (((y - 1) * w) + x) - 1;
-};
-
-Board.prototype.indexToPos = function(index) {
-  var x,
-      y;
-
-  y = Math.floor(index/this.width) + 1;
-  x = (index % this.width) + 1;
-  return [x,y];
-};
-
-Board.prototype.toString = function() {
-  var toString = '',
-      line='\n|-------------------------------|\n',
-      lineEnd = '|',
-      i,
-      pieceName;
-
-  for (i = 0; i < this._board.length; i++) {
-    if ( i !== 0 && i%this.width === 0) {
-      toString += lineEnd;
-    }
-    if (i%this.width === 0) {
-      toString += line;
-    }
-    var piece = this._board[i];
-    toString += util.format('| %s ', (piece) ? piece.name[0] : ' ');
-  } 
-  toString += lineEnd;
-  toString += line;
-  return toString;
-};
-
-module.exports = exports = Board; 
+module.exports = exports = Board;
