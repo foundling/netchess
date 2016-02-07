@@ -14,6 +14,7 @@ body {
 }
 
 .square {
+  box-sizing: border-box;
   width: 80px;
   height: 80px;
   margin:0;
@@ -59,10 +60,10 @@ h1 {
   width: 80px;
 }
 
-.move-source {
-  background: rgba(240,0,0,0.4);
+.over {
+  background: lightgreen;
 }
 
-.move-destination {
-  background: rgba(240,0,0,1);
+.being-dragged {
+  border: 4px dotted black;
 }
