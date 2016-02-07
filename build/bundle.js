@@ -431,10 +431,24 @@
 
 	  var drop = function(ev) {
 	    ev.stopPropagation();
+	    // remove srcEl's dragged classes and the current spot's hover class
 	    $(srcEl).removeClass('being-dragged');
-	    $(srcEl).removeClass('king');
 	    $(this).removeClass('over');
-	    $(this).addClass('king');
+
+	    // take srcEl's piece-* class and apply it to this one
+	    var newClass = $.grep($(srcEl).attr('class').split(' '), function(v){
+	      return /piece-/.test(v);
+	    });
+
+	    if (newClass) { 
+	      newClass = newClass[0]; 
+	    }
+	    else {
+	      console.log('something went wrong at drop-swap event');
+	    }
+
+	    $(this).addClass(newClass);
+	    $(srcEl).removeClass(newClass);
 	    console.log('drop');
 	  };
 
