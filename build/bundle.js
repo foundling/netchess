@@ -429,6 +429,7 @@
 
 	  var drop = function(ev) {
 	    ev.stopPropagation();
+	    $(this).removeClass('over');
 	    $(srcEl).removeClass('being-dragged');
 	    console.log('drop');
 	  };
