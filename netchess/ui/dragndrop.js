@@ -5,11 +5,39 @@ module.exports = exports = (function() {
 
   var srcEl = null;
 
+  // mocked rule engine
+  var isValidMove = function(srcEl, destEl) {
+    return false;
+  };
+
+  var completeMove = function(srcEl,destEl){
+
+    var newClass = $.grep($(srcEl).attr('class').split(' '), function(v){
+      return /piece-/.test(v);
+    })[0];
+
+    if (!newClass.length) {
+      console.log('something went wrong at the drop-swap event');
+    }
+
+    $(srcEl).removeClass(newClass);
+    $(destEl).addClass(newClass);
+  };
+
+  var abortMove = function(srcEl, destEl) {
+    
+    $(destEl).removeClass('over');
+    $(srcEl).removeClass('being-dragged');
+
+  };
+
+  var removeDragClasses = function(srcEl,destEl) {
+    $(destEl).removeClass('over');    
+    $(srcEl).removeClass('being-dragged');    
+  };
+
   var dragStart = function(ev) {
     srcEl = this;
-    ev.dataTransfer.effectAllowed = 'all';
-    ev.dataTransfer.setData('text/plain',$(this).css('background-image'));
-    console.log($(this).css('background-image'));
     $(ev.target).addClass('being-dragged');  
     console.log('dragstart');
   };
@@ -31,25 +59,13 @@ module.exports = exports = (function() {
 
   var drop = function(ev) {
     ev.stopPropagation();
-    // remove srcEl's dragged classes and the current spot's hover class
-    $(srcEl).removeClass('being-dragged');
-    $(this).removeClass('over');
-
-    // take srcEl's piece-* class and apply it to this one
-    var newClass = $.grep($(srcEl).attr('class').split(' '), function(v){
-      return /piece-/.test(v);
-    });
-
-    if (newClass) { 
-      newClass = newClass[0]; 
+    if (isValidMove(srcEl, this)) {
+      removeDragClasses(srcEl,this);
+      completeMove(srcEl,this);
+      console.log('drop');
+    } else {
+      abortMove(srcEl, this);
     }
-    else {
-      console.log('something went wrong at drop-swap event');
-    }
-
-    $(this).addClass(newClass);
-    $(srcEl).removeClass(newClass);
-    console.log('drop');
   };
 
   squares.each(function(s) {

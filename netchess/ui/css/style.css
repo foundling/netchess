@@ -71,8 +71,8 @@ h1 {
 }
 
 
-.over {
-  background: lightgreen;
+.square.over {
+  background-color: lightgreen !important;
 }
 
 .being-dragged {
