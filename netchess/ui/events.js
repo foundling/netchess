@@ -8,6 +8,8 @@ module.exports = exports = (function() {
   var dragStart = function(ev) {
     srcEl = this;
     ev.dataTransfer.effectAllowed = 'all';
+    ev.dataTransfer.setData('text/plain',$(this).css('background-image'));
+    console.log($(this).css('background-image'));
     $(ev.target).addClass('being-dragged');  
     console.log('dragstart');
   };
@@ -29,8 +31,10 @@ module.exports = exports = (function() {
 
   var drop = function(ev) {
     ev.stopPropagation();
-    $(this).removeClass('over');
     $(srcEl).removeClass('being-dragged');
+    $(srcEl).removeClass('king');
+    $(this).removeClass('over');
+    $(this).addClass('king');
     console.log('drop');
   };
 

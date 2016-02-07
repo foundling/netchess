@@ -19,7 +19,7 @@ gulp.task('webpack:dev', function() {
 });
 
 gulp.task('styles:dev', function(){
-  return gulp.src('./netchess/ui/css/**/*.css')
+  return gulp.src('./netchess/ui/css/*.css')
     .pipe(gulp.dest('build/'));
 });
 

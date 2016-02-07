@@ -1,0 +1,89 @@
+/* BLACK */
+.square[class*='piece-'] {
+  background-position: 7px 7px;
+}
+
+.piece-bk {
+  background: url('img/bk.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-bq {
+  background: url('img/bq.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-bb {
+  background: url('img/bb.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-bkn {
+  background: url('img/bkn.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-br {
+  background: url('img/br.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-bp {
+  background: url('img/bp.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+/* WHITE */
+.piece-wk {
+  background: url('img/wk.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-wq {
+  background: url('img/wq.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-wb {
+  background: url('img/wb.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-wkn {
+  background: url('img/wkn.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-wr {
+  background: url('img/wr.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}
+
+.piece-wp {
+  background: url('img/wp.png');
+  background-repeat: no-repeat;
+  height: 80px; 
+  width: 80px;
+}

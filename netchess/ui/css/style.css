@@ -14,15 +14,32 @@ body {
 }
 
 .square {
-  box-sizing: border-box;
   width: 80px;
   height: 80px;
   margin:0;
   margin-left: -4px;
   padding: 0;
   line-height: 80px;
-  background: lightgray;
   display: inline-block;
+  border: 4px solid black;
+}
+
+/* checkered squares */
+
+.row:nth-child(even) .square:nth-child(even) {
+  background-color: gray;
+}
+
+.row:nth-child(even) .square:nth-child(odd) {
+  background-color: white;
+}
+
+.row:nth-child(odd) .square:nth-child(odd) {
+  background-color: gray;
+}
+
+.row:nth-child(odd) .square:nth-child(even) {
+  background-color: white;
 }
 
 .stats {
@@ -53,12 +70,6 @@ h1 {
   top: 20px;
 }
 
-#row0 .square:first-child {
-  background: url('img/bk.png');
-  background-repeat: no-repeat;
-  height: 80px; 
-  width: 80px;
-}
 
 .over {
   background: lightgreen;
