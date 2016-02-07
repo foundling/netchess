@@ -19,12 +19,12 @@ gulp.task('webpack:dev', function() {
 });
 
 gulp.task('styles:dev', function(){
-  return gulp.src('./css/style.css')
+  return gulp.src('./netchess/ui/css/**/*.css')
     .pipe(gulp.dest('build/'));
 });
 
 gulp.task('staticfiles:dev', function() {
-  return gulp.src('./index.html')
+  return gulp.src('./netchess/ui/index.html')
     .pipe(gulp.dest('build/'));
 });
 

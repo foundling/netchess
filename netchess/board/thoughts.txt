@@ -1,0 +1,40 @@
+who sets up the pieces?
+how is a player in check prevented from moving in a way that doesn't prevent check?  
+how is checkmate determined?
+how is a move determined to be valid?
+
+Board
+
+- height, width
+- h array with h arrays of size w inside
+- setpiece function
+- getpiece function
+- boundary checking function
+
+Piece
+
+- name
+- set of move functions, vector addition
+- set of next possible moves
+- state object to help with things like first move, en passant, etc.
+- initial position
+
+Rules
+
+- static data to be read in at initialization time
+- data for where pieces are initially located
+- a list of objects where key is piece name, value is a list of coordinates 
+
+Player
+
+- name
+- next function that lets the player modify the board a single time
+- inCheck state variable
+
+Game Engine
+
+- initializes the board
+- asks the players what their player names will be
+- controls the game flow by alternately calling next on each player 
+-  
+
