@@ -10,13 +10,24 @@ module.exports = exports = (function() {
     return false;
   };
 
-  var completeMove = function(srcEl,destEl){
-
-    var newClass = $.grep($(srcEl).attr('class').split(' '), function(v){
+  var getPieceName = function(srcEl) {
+    return $.grep($(srcEl).attr('class').split(' '), function(v){
       return /piece-/.test(v);
     })[0];
+  };
 
-    if (!newClass.length) {
+  var isPiece = function(srcEl) {
+    var pieceName = $.grep($(srcEl).attr('class').split(' '), function(v){
+      return /piece-/.test(v);
+    })[0];
+    return (pieceName) ? true : false;
+  };
+
+  var completeMove = function(srcEl,destEl){
+    
+    var newClass = getPieceName(srcEl);
+
+    if (!newClass) {
       console.log('something went wrong at the drop-swap event');
     }
 
@@ -37,9 +48,14 @@ module.exports = exports = (function() {
   };
 
   var dragStart = function(ev) {
-    srcEl = this;
-    $(ev.target).addClass('being-dragged');  
-    console.log('dragstart');
+    if (!isPiece(this)) {
+      ev.preventDefault();
+      return false;
+    } else {
+      srcEl = this;
+      $(ev.target).addClass('being-dragged');  
+      console.log('dragstart');
+    }
   };
 
   var dragEnter = function(ev) {
@@ -67,6 +83,7 @@ module.exports = exports = (function() {
       abortMove(srcEl, this);
     }
   };
+
 
   squares.each(function(s) {
     this.addEventListener('dragstart', dragStart);
