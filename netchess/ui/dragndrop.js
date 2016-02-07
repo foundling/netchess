@@ -5,8 +5,13 @@ module.exports = exports = (function() {
 
   var srcEl = null;
 
-  // mocked rule engine
+  /*********************/
+  /* UTILITY FUNCTIONS */
+  /*********************/
+
   var isValidMove = function(srcEl, destEl) {
+    // simple mock func
+    //this is where the rule engine comes in
     return false;
   };
 
@@ -47,6 +52,10 @@ module.exports = exports = (function() {
     $(srcEl).removeClass('being-dragged');    
   };
 
+  /******************/
+  /* Event Handlers */
+  /******************/
+
   var dragStart = function(ev) {
     if (!isPiece(this)) {
       ev.preventDefault();
@@ -83,7 +92,6 @@ module.exports = exports = (function() {
       abortMove(srcEl, this);
     }
   };
-
 
   squares.each(function(s) {
     this.addEventListener('dragstart', dragStart);

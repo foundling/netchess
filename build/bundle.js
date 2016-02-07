@@ -405,8 +405,12 @@
 
 	  var srcEl = null;
 
-	  // mocked rule engine
+	  /*********************/
+	  /* UTILITY FUNCTIONS */
+	  /*********************/
+
 	  var isValidMove = function(srcEl, destEl) {
+	    // simple mock func
 	    return false;
 	  };
 
@@ -447,6 +451,10 @@
 	    $(srcEl).removeClass('being-dragged');    
 	  };
 
+	  /******************/
+	  /* Event Handlers */
+	  /******************/
+
 	  var dragStart = function(ev) {
 	    if (!isPiece(this)) {
 	      ev.preventDefault();
@@ -483,7 +491,6 @@
 	      abortMove(srcEl, this);
 	    }
 	  };
-
 
 	  squares.each(function(s) {
 	    this.addEventListener('dragstart', dragStart);
