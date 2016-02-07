@@ -23,10 +23,15 @@ gulp.task('styles:dev', function(){
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('staticfiles:dev', function() {
+gulp.task('html:dev', function() {
   return gulp.src('./netchess/ui/index.html')
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('build:dev', ['jsonlint', 'styles:dev', 'staticfiles:dev', 'webpack:dev']);
+gulp.task('images:dev', function() {
+  return gulp.src('./netchess/ui/img/*.png')
+    .pipe(gulp.dest('build/img/'));
+});
+
+gulp.task('build:dev', ['jsonlint', 'styles:dev', 'html:dev','images:dev', 'webpack:dev']);
 gulp.task('default', ['build:dev']);
