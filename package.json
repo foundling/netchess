@@ -7,14 +7,19 @@
     "doc": "docs"
   },
   "dependencies": {
-    "jquery": "^2.2.0"
+    "connect": "^3.4.1",
+    "finalhandler": "^0.4.1",
+    "jquery": "^2.2.0",
+    "serve-static": "^1.10.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-json-lint": "^0.1.0",
     "mocha": "^2.4.5",
     "mustache": "^2.2.1",
+    "node-static": "^0.7.7",
     "webpack-stream": "^3.1.0"
   },
   "scripts": {
