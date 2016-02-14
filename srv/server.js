@@ -5,18 +5,19 @@ var PORT = 5000,
     http = require('http'),
     app = connect(),
     serveStatic = require('serve-static'),
-    jsonParser = require('body-parser'); 
+    bodyParser = require('body-parser'),
+    serve = serveStatic('public');
 
-
-var serve = serveStatic('public');
 app.use(serve);
-
-app.use('/game', function(req, res, next) {
-    console.log('/game request');
-});
+app.use(bodyParser.json());
 
 app.use('/update', function(req, res, next) {
-    console.log('/update request');
+    if (req.method === 'POST') {
+        res.writeHead(200,{'Content-type':'text/plain'}); 
+        res.write('you said: ' + req.body.hello);
+    }
+    next();
+    return res.end();
 });
 
 http.createServer(app).listen(PORT, function() {

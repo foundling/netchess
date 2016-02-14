@@ -1,98 +1,95 @@
 <!doctype>
-<html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
 <body>
-
-  <h1>Netchess</h1>
-
-  <div class="stats">
-  </div>
-
-  <div class="board">
-    <div class="row" id="row0">
-      <div draggable="true" class="square piece-br"></div>
-      <div draggable="true" class="square piece-bkn"></div>
-      <div draggable="true" class="square piece-bb"></div>
-      <div draggable="true" class="square piece-bq"></div>
-      <div draggable="true" class="square piece-bk"></div>
-      <div draggable="true" class="square piece-bb"></div>
-      <div draggable="true" class="square piece-bkn"></div>
-      <div draggable="true" class="square piece-br"></div>
+    <h1>Netchess</h1>
+    <div class="stats"></div>
+    <div class="board">
+            <div class="row" id="row0">
+                <div draggable="true" id="sq0" class="square piece-br"></div>
+                <div draggable="true" id="sq1" class="square piece-bkn"></div>
+                <div draggable="true" id="sq2" class="square piece-bb"></div>
+                <div draggable="true" id="sq3" class="square piece-bq"></div>
+                <div draggable="true" id="sq4" class="square piece-bk"></div>
+                <div draggable="true" id="sq5" class="square piece-bb"></div>
+                <div draggable="true" id="sq6" class="square piece-bkn"></div>
+                <div draggable="true" id="sq7" class="square piece-br"></div>
+            </div>
+            <div class="row" id="row1">
+                <div draggable="true" id="sq8" class="square piece-bp"></div>
+                <div draggable="true" id="sq9" class="square piece-bp"></div>
+                <div draggable="true" id="sq10" class="square piece-bp"></div>
+                <div draggable="true" id="sq11" class="square piece-bp"></div>
+                <div draggable="true" id="sq12" class="square piece-bp"></div>
+                <div draggable="true" id="sq13" class="square piece-bp"></div>
+                <div draggable="true" id="sq14" class="square piece-bp"></div>
+                <div draggable="true" id="sq15" class="square piece-bp"></div>
+            </div>
+            <div class="row" id="row2">
+                <div draggable="true" id="sq16" class="square"></div>
+                <div draggable="true" id="sq17" class="square"></div>
+                <div draggable="true" id="sq18" class="square"></div>
+                <div draggable="true" id="sq19" class="square"></div>
+                <div draggable="true" id="sq20" class="square"></div>
+                <div draggable="true" id="sq21" class="square"></div>
+                <div draggable="true" id="sq22" class="square"></div>
+                <div draggable="true" id="sq23" class="square"></div>
+            </div>
+            <div class="row" id="row3">
+                <div draggable="true" id="sq24" class="square"></div>
+                <div draggable="true" id="sq25" class="square"></div>
+                <div draggable="true" id="sq26" class="square"></div>
+                <div draggable="true" id="sq27" class="square"></div>
+                <div draggable="true" id="sq28" class="square"></div>
+                <div draggable="true" id="sq29" class="square"></div>
+                <div draggable="true" id="sq30" class="square"></div>
+                <div draggable="true" id="sq31" class="square"></div>
+            </div>
+            <div class="row" id="row4">
+                <div draggable="true" id="sq32" class="square"></div>
+                <div draggable="true" id="sq33" class="square"></div>
+                <div draggable="true" id="sq34" class="square"></div>
+                <div draggable="true" id="sq35" class="square"></div>
+                <div draggable="true" id="sq36" class="square"></div>
+                <div draggable="true" id="sq37" class="square"></div>
+                <div draggable="true" id="sq38" class="square"></div>
+                <div draggable="true" id="sq39" class="square"></div>
+            </div>
+            <div class="row" id="row5">
+                <div draggable="true" id="sq40" class="square"></div>
+                <div draggable="true" id="sq41" class="square"></div>
+                <div draggable="true" id="sq42" class="square"></div>
+                <div draggable="true" id="sq43" class="square"></div>
+                <div draggable="true" id="sq44" class="square"></div>
+                <div draggable="true" id="sq45" class="square"></div>
+                <div draggable="true" id="sq46" class="square"></div>
+                <div draggable="true" id="sq47" class="square"></div>
+            </div>
+            <div class="row" id="row6">
+                <div draggable="true" id="sq48" class="square piece-wr"></div>
+                <div draggable="true" id="sq49" class="square piece-wkn"></div>
+                <div draggable="true" id="sq50" class="square piece-wb"></div>
+                <div draggable="true" id="sq51" class="square piece-wk"></div>
+                <div draggable="true" id="sq52" class="square piece-wq"></div>
+                <div draggable="true" id="sq53" class="square piece-wb"></div>
+                <div draggable="true" id="sq54" class="square piece-wkn"></div>
+                <div draggable="true" id="sq55" class="square piece-wr"></div>
+            </div>
+            <div class="row" id="row7">
+                <div draggable="true" id="sq56" class="square piece-wp"></div>
+                <div draggable="true" id="sq57" class="square piece-wp"></div>
+                <div draggable="true" id="sq58" class="square piece-wp"></div>
+                <div draggable="true" id="sq59" class="square piece-wp"></div>
+                <div draggable="true" id="sq60" class="square piece-wp"></div>
+                <div draggable="true" id="sq61" class="square piece-wp"></div>
+                <div draggable="true" id="sq62" class="square piece-wp"></div>
+                <div draggable="true" id="sq63" class="square piece-wp"></div>
+            </div>
     </div>
-    <div class="row" id="row1">
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-      <div draggable="true" class="square piece-bp"></div>
-    </div>
-    <div class="row" id="row2">
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-    </div>
-    <div class="row" id="row3">
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-    </div>
-    <div class="row" id="row4">
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-    </div>
-    <div class="row" id="row5">
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-      <div draggable="true" class="square"></div>
-    </div>
-    <div class="row" id="row6">
-      <div draggable="true" class="square piece-wr"></div>
-      <div draggable="true" class="square piece-wkn"></div>
-      <div draggable="true" class="square piece-wb"></div>
-      <div draggable="true" class="square piece-wq"></div>
-      <div draggable="true" class="square piece-wk"></div>
-      <div draggable="true" class="square piece-wb"></div>
-      <div draggable="true" class="square piece-wkn"></div>
-      <div draggable="true" class="square piece-wr"></div>
-    </div>
-    <div class="row" id="row7">
-      <div draggable="true" class="square piece-wr"></div>
-      <div draggable="true" class="square piece-wkn"></div>
-      <div draggable="true" class="square piece-wb"></div>
-      <div draggable="true" class="square piece-wq"></div>
-      <div draggable="true" class="square piece-wk"></div>
-      <div draggable="true" class="square piece-wb"></div>
-      <div draggable="true" class="square piece-wkn"></div>
-      <div draggable="true" class="square piece-wr"></div>
-    </div>
-  </div>
-  <div class="info"><span>i</span></div>
-  <script src="bundle.js"></script>
+    <div class="info"><span>i</span></div>
+    <script src="bundle.js"></script>
 </body>
 </html>
