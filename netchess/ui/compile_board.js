@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 var h = require('handlebars'),
     fs = require('fs'),
     pieces = {

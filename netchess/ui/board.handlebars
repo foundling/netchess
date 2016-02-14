@@ -1,29 +1,33 @@
 <!doctype>
-<html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
 <body>
 
-  <h1>Netchess</h1>
+    <h1>Netchess</h1>
 
-  <div class="stats"></div>
+    <div class="stats"></div>
 
-  <div class="board">
-      {{#range 64}}
-          {{#rowStart this}}
-          <div class="row" id="row{{rowNum ../this}}">
-          {{/rowStart}}
-              <div draggable="true" id="sq{{this}}" class="square{{prop ../this this}}"></div>
-          {{#rowEnd this}}
-          </div>
-          {{/rowEnd}}
+    <div class="board">
+        {{#range 64}}
 
-      {{/range}}
-  </div>
+            {{#rowStart this}}
+            <div class="row" id="row{{rowNum ../this}}">
+            {{/rowStart}}
 
-  <div class="info"><span>i</span></div>
+                <div draggable="true" id="sq{{this}}" class="square{{prop ../this this}}"></div>
 
-<script src="bundle.js"></script>
+            {{#rowEnd this}}
+            </div>
+            {{/rowEnd}}
+
+        {{/range}}
+    </div>
+
+    <div class="info"><span>i</span></div>
+
+    <script src="bundle.js"></script>
 </body>
 </html>

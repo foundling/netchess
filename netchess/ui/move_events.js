@@ -38,6 +38,8 @@ module.exports = exports = (function() {
 
     $(srcEl).removeClass(newClass);
     $(destEl).addClass(newClass);
+
+    removeDragClasses(srcEl,this);
   };
 
   var abortMove = function(srcEl, destEl) {
@@ -84,12 +86,26 @@ module.exports = exports = (function() {
 
   var drop = function(ev) {
     ev.stopPropagation();
-    if (isValidMove(srcEl, this)) {
-      removeDragClasses(srcEl,this);
-      completeMove(srcEl,this);
-      console.log('drop');
-    } else {
-      abortMove(srcEl, this);
+    
+    if ( !isValidMove(srcEl, this) ) {
+        abortMove(srcEl, this);
+    }
+    else {
+        completeMove(srcEl, this);
+
+        var data = {
+          src: srcEl.id.split('sq')[1],
+          dest: this.id.split('sq')[1],
+        };
+
+        $.ajax({
+            url: '/update',
+            method: 'POST',
+            data: JSON.stringify(data),
+        }).done(function(data) {
+            console.log(data);
+        });
+        console.log('drop');
     }
   };
 
