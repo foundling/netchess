@@ -12,7 +12,7 @@ module.exports = exports = (function() {
   var isValidMove = function(srcEl, destEl) {
     // simple mock func
     //this is where the rule engine comes in
-    return false;
+    return true;
   };
 
   var getPieceName = function(srcEl) {
