@@ -103,7 +103,7 @@ module.exports = exports = (function() {
             method: 'POST',
             data: JSON.stringify(data),
         }).done(function(data) {
-            console.log(data);
+            console.log(JSON.parse(Object.keys(data)[0]));  // why this? problem in connect.js server
         });
         console.log('drop');
     }
