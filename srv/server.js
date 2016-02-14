@@ -8,17 +8,21 @@ var PORT = 5000,
     bodyParser = require('body-parser'),
     serve = serveStatic('public');
 
-app.use(serve);
-app.use(bodyParser.json());
-
-app.use('/update', function(req, res, next) {
+app
+.use(bodyParser({extended:true})) // figure out why bodyParser.json() results in an empty body, but this works.
+.use('/update', function(req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin","http://localhost:5000");
     if (req.method === 'POST') {
-        res.writeHead(200,{'Content-type':'text/plain'}); 
-        res.write('you said: ' + req.body.hello);
+        console.log('post: ', req.body);
+
+        // insert long polling of type application/json here instead of an immediate response
+        res.writeHead(200,{'Content-type':'application/json'}); 
+        return res.end(JSON.stringify(req.body));
+    } else {
+      next();
     }
-    next();
-    return res.end();
-});
+})
+.use('/',serve);
 
 http.createServer(app).listen(PORT, function() {
     console.log('SERVER UP ON PORT', PORT);
