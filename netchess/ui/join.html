@@ -40,12 +40,12 @@
                 })
                 .done(function(res) {
                     var p2Data = {
-                        token: res.gameToken,                       
+                        token: res.token,                       
                         player: res.player,                       
                         alias: res.alias,                       
                     };
-
-                    window.localStorage.setItem('netchess-data',JSON.serialize(p2Data));
+                    window.localStorage.setItem('netchess-data',JSON.stringify(p2Data));
+                    window.location = '/game';
                 });
             });
         </script>
