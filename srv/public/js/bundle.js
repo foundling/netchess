@@ -49,7 +49,6 @@
 	var events = __webpack_require__(8);
 
 
-
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
@@ -396,7 +395,9 @@
 	  /* UTILITY FUNCTIONS */
 	  /*********************/
 
-	  var isValidMove = function(srcEl, destEl) {  return true; };
+	  var isValidMove = function(srcEl, destEl) {  
+	      return true; 
+	  };
 
 	  var getPieceName = function(el) {
 	    return $.grep($(el).attr('class').split(' '), function(v){
@@ -404,14 +405,12 @@
 	    })[0];
 	  };
 
-
 	  var isPiece = function(el) {
-	    var pieceName = getPieceName(el);
-	    return (pieceName) ? true : false;
+	    return getPieceName(el).length ? true : false;
 	  };
 
 	  var isPieceAlt = function(el) {
-	      return !!getPieceName(el); 
+	      return !!getPieceName(el).length; 
 	  };
 
 	  var handleCollision = function(srcEl, destEl) {
@@ -511,7 +510,8 @@
 	            method: 'POST',
 	            data: JSON.stringify(data),
 	        }).done(function(data) {
-	            console.log(JSON.parse(Object.keys(data)[0]));  // why this? problem in connect.js server
+	            console.log(JSON.parse(Object.keys(data)[0]));  
+	            // why this? problem in express.js json middleware on server
 	        });
 	        console.log('drop');
 	    }

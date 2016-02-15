@@ -16,16 +16,16 @@ gulp.task('webpack:dev', function() {
         filename: 'bundle.js'
       }
     }))
-    .pipe(gulp.dest('./srv/public/'));
+    .pipe(gulp.dest('./srv/public/js/'));
 });
 
 gulp.task('styles:dev', function(){
   return gulp.src('./netchess/ui/css/*.css')
-          .pipe(gulp.dest('./srv/public/'));
+          .pipe(gulp.dest('./srv/public/styles/'));
 });
 
 gulp.task('html:dev', function() {
-  return gulp.src('./netchess/ui/index.html')
+  return gulp.src('./netchess/ui/*.html')
     .pipe(gulp.dest('./srv/public/'));
 });
 

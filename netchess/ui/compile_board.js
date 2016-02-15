@@ -85,7 +85,7 @@ function rowEnd(squareNumber, options) {
     h.registerHelper(f.name,f);
 });
 
-var partial = fs.readFileSync('board.handlebars').toString('utf8');
+var partial = fs.readFileSync('board.template').toString('utf8');
 var template = h.compile(partial);
 var output = template(pieces);
 console.log(output);

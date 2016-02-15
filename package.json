@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "connect": "^3.4.1",
+    "express": "^4.13.4",
     "finalhandler": "^0.4.1",
     "jquery": "^2.2.0",
-    "serve-static": "^1.10.2"
+    "serve-static": "^1.10.2",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",

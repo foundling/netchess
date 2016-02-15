@@ -1,34 +1,53 @@
 module.exports = exports = (function() {
 
-  var $ = require('jquery');
-  var squares = $('.square');
+  var $ = require('jquery'),
+      squares = $('.square'),
+      srcEl = null;
 
-  var srcEl = null;
-
+  var move = {
+     src: null,
+     dest: null,
+  };
   /*********************/
   /* UTILITY FUNCTIONS */
   /*********************/
 
-  var isValidMove = function(srcEl, destEl) {
-    // simple mock func
-    //this is where the rule engine comes in
-    return true;
+  var isValidMove = function(srcEl, destEl) {  
+      return true; 
   };
 
-  var getPieceName = function(srcEl) {
-    return $.grep($(srcEl).attr('class').split(' '), function(v){
+  var getPieceName = function(el) {
+    return $.grep($(el).attr('class').split(' '), function(v){
       return /piece-/.test(v);
     })[0];
   };
 
-  var isPiece = function(srcEl) {
-    var pieceName = $.grep($(srcEl).attr('class').split(' '), function(v){
-      return /piece-/.test(v);
-    })[0];
-    return (pieceName) ? true : false;
+  var isPiece = function(el) {
+    return getPieceName(el).length ? true : false;
   };
 
-  var completeMove = function(srcEl,destEl){
+  var isPieceAlt = function(el) {
+      return !!getPieceName(el).length; 
+  };
+
+  var handleCollision = function(srcEl, destEl) {
+
+  };
+
+  var movePiece = function(srcEl, destEl) {
+      // k= swp4p =
+      var tempAttributes = {};
+      if (isPiece(destEl)) {
+          handleCollision(srcEl, destEl);
+          var pieceName = getPieceName(el);
+      }
+  }; 
+
+  var swapPieceForBlank = function() {
+
+  }; 
+
+  var completeMove = function(srcEl, destEl){
     
     var newClass = getPieceName(srcEl);
 
@@ -42,7 +61,7 @@ module.exports = exports = (function() {
     removeDragClasses(srcEl,this);
   };
 
-  var abortMove = function(srcEl, destEl) {
+  var cancelMove = function(srcEl, destEl) {
     
     $(destEl).removeClass('over');
     $(srcEl).removeClass('being-dragged');
@@ -88,14 +107,19 @@ module.exports = exports = (function() {
     ev.stopPropagation();
     
     if ( !isValidMove(srcEl, this) ) {
-        abortMove(srcEl, this);
+        cancelMove(srcEl, this);
     }
     else {
         completeMove(srcEl, this);
 
         var data = {
-          src: srcEl.id.split('sq')[1],
-          dest: this.id.split('sq')[1],
+          gameToken: window.localStorage.getItem('ncGameToken'),
+          username: window.localStorage.getItem('ncUserName'),
+          alias: window.localStorage.getItem('ncAlias'),
+          move: {
+            src: srcEl.id.split('sq')[1],
+            dest: this.id.split('sq')[1]
+          }
         };
 
         $.ajax({
@@ -103,7 +127,8 @@ module.exports = exports = (function() {
             method: 'POST',
             data: JSON.stringify(data),
         }).done(function(data) {
-            console.log(JSON.parse(Object.keys(data)[0]));  // why this? problem in connect.js server
+            console.log(JSON.parse(Object.keys(data)[0]));  
+            // why this? problem in express.js json middleware on server
         });
         console.log('drop');
     }

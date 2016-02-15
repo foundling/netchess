@@ -1,7 +1,7 @@
 'use strict';
 
 var pieceLocations = {
-  'far' : {
+  'p1' : {
         'pawn' : [
             [1,2],
             [2,2],
@@ -31,7 +31,7 @@ var pieceLocations = {
             [8,1],
           ]
   },
-  'near' : {
+  'p2' : {
         'pawn' : [
             [1,7],
             [2,7],
