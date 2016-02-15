@@ -1,0 +1,49 @@
+<!doctype>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <link rel="stylesheet" type="text/css" href="styles/style.css">
+    </head>
+    <body>
+
+        <p>Please enter the game token created when player1 started your game</p>
+        <input id="token" type="text"></input>
+
+        <p>Please choose a username [default is 'player2']:</p>
+        <input id="username" type="text"></input>
+
+        <button id="submit">submit</button>
+
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script>
+            var unameInput = $('#username');            
+            var tokenInput = $('#token');            
+            var btn = $('#submit');            
+
+            btn.on('click', function(ev) {
+                var uname = unameInput.val();
+                var token = tokenInput.val();
+                var data = {
+                    username: uname,
+                    token: token,
+                    player: 'player2'
+                };
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/player2',
+                    data: JSON.stringify(data)
+                })
+                .done(function(res) {
+                    window.localStorage.setItem('ncGameToken',res.gameToken);
+                    window.localStorage.setItem('ncUserName','player1');
+                    window.localStorage.setItem('ncAlias',uname);
+                    if (res.gameToken) {
+                      window.location = "/game";
+                    }
+
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <link rel="stylesheet" type="text/css" href="styles/style.css">
+    </head>
+    <body>
+        <p>Please choose a user name: [default is 'player1']</p>
+        <input id="username" type="text" value="player1"></input>
+        <button id="submit">Submit</button>
+
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js">
+        </script>
+        <script>
+          // gets username, submits it to '/init' on server,
+          // then receives a gametoken to identify game uniquely
+          // then stores it in window.localStorage  and redirects to the game
+          var unameInput = $('#username');            
+            var btn = $('#submit');            
+
+            btn.on('click', function(ev) {
+                var uname = unameInput.val();
+                var data = {
+                    username: uname,
+                    player: 'player1'
+                };
+                console.log('username: ', uname);
+                $.ajax({
+                    method: 'POST',
+                    url: '/player1',
+                    data: JSON.stringify(data)
+                })
+                .done(function(res) {
+                    window.localStorage.setItem('ncGameToken',res.gameToken);
+                    window.localStorage.setItem('ncUserName','player1');
+                    window.localStorage.setItem('ncAlias',uname);
+                    window.location = "/game";
+
+                });
+            });
+        </script>
+    </body>
+</html>
