@@ -496,6 +496,7 @@
 	        completeMove(srcEl, this);
 
 	        var data = {
+	          // fix this: parse 'netchess-data' object in local storage instead
 	          gameToken: window.localStorage.getItem('ncGameToken'),
 	          username: window.localStorage.getItem('ncUserName'),
 	          alias: window.localStorage.getItem('ncAlias'),

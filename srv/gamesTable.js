@@ -35,8 +35,8 @@ var gamesTable = {
         if (! /player[1,2]/.test(player)) return false;
         map[token][player]['alias'] = alias;
     },
-    showGamesTable: function() {
-        console.log(JSON.stringify(map,null,2));
+    show: function() {
+        return JSON.stringify(map,null,2);
     }
 };
 

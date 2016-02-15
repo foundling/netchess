@@ -16,17 +16,21 @@
 
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
         <script>
-            var aliasInput = $('#alias');            
+
             var tokenInput = $('#token');            
+            var aliasInput = $('#alias');            
             var btn = $('#submit');            
 
             btn.on('click', function(ev) {
-                var alias = unameInput.val();
+
                 var token = tokenInput.val();
+                var player = 'player2';
+                var alias = aliasInput.val();
+
                 var data = {
-                    gameToken: token,
+                    token: token,
+                    player: player,
                     alias: alias,
-                    player: 'player2'
                 };
 
                 $.ajax({
@@ -35,13 +39,13 @@
                     data: JSON.stringify(data)
                 })
                 .done(function(res) {
-                    window.localStorage.setItem('ncGameToken',res.gameToken);
-                    window.localStorage.setItem('ncUserName','player1');
-                    window.localStorage.setItem('ncAlias',uname);
-                    if (res.gameToken) {
-                      window.location = "/game";
-                    }
+                    var p2Data = {
+                        token: res.gameToken,                       
+                        player: res.player,                       
+                        alias: res.alias,                       
+                    };
 
+                    window.localStorage.setItem('netchess-data',JSON.serialize(p2Data));
                 });
             });
         </script>

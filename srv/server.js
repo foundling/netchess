@@ -69,7 +69,7 @@ app
 
     console.log('/player1');
     console.log('got: \n', reqData);
-    console.log('game state: \n', gamesTable.showGamesTable());
+    console.log('game state: \n', gamesTable.show());
 
 })
 .post('/player2', function(req, res) {
@@ -79,21 +79,21 @@ app
 
     console.log('/player2');
     console.log('got: \n', reqData);
-    console.log('game state: \n', games[reqData.gameToken]);
 
     // update game state
-    games[reqData.gameToken].player2 = {
-        alias: reqData.alias,
-        move: null
-    };
+    var token = reqData.token;
+    var player = reqData.player;
+    var alias = reqData.alias;
+    gamesTable.addPlayer(token, player, alias);
+    console.log('game state: \n', gamesTable.show());
 
     var resData = {
-        player: 'player2',
-        alias:   reqData.alias,
-        gameToken: reqData.gameToken
+        player: reqData.player,
+        alias:  reqData.alias,
+        token:  reqData.gameToken
     };
-    res.json({
-    });
+    res.json(resData);
+
 })
 .post('/update', function(req, res) {
     res.setHeader("Access-Control-Allow-Origin","http://localhost:5000");

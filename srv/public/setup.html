@@ -22,24 +22,24 @@
                 // send alias, player  
                 // get back all data to put in localstorage (player, alias, gameToken  
                 var alias = aliasInput.val();
+                var player = 'player1';
                 var data = {
+                    player: player,
                     alias: alias,
-                    player: 'player1'
                 };
-                console.log(JSON.stringify(data));
                 $.ajax({
                     method: 'POST',
                     url: '/player1',
                     data: JSON.stringify(data)
                 })
                 .done(function(res) {
-                    var lsObj = {
-                        gameToken: res.gameToken,
-                        player:    'player2',
-                        alias:     res.alias,
+                    var p1Obj = {
+                        token:    res.gameToken,
+                        player:   res.player,
+                        alias:    res.alias,
                     };
                     // store game data
-                    window.localStorage.setItem('netchess-data',JSON.stringify(lsObj));
+                    window.localStorage.setItem('netchess-data',JSON.stringify(p1Obj));
                     // advance to /game
                     window.location = "/game";
                 });
