@@ -17,6 +17,9 @@
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
         <script>
 
+            // TESTING
+            localStorage.removeItem('netchess-data');
+
             var tokenInput = $('#token');            
             var aliasInput = $('#alias');            
             var btn = $('#submit');            
@@ -40,12 +43,12 @@
                 })
                 .done(function(res) {
                     var p2Data = {
-                        token: res.gameToken,                       
+                        token: res.token,                       
                         player: res.player,                       
                         alias: res.alias,                       
                     };
-
-                    window.localStorage.setItem('netchess-data',JSON.serialize(p2Data));
+                    window.localStorage.setItem('netchess-data',JSON.stringify(p2Data));
+                    window.location = '/game';
                 });
             });
         </script>

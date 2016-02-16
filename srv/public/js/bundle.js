@@ -495,13 +495,11 @@
 	    else {
 	        completeMove(srcEl, this);
 
+	        var netchessData = JSON.parse(window.localStorage.getItem('netchess-data'));
 	        var data = {
-	          // fix this: parse 'netchess-data' object in local storage instead
-	          gameToken: window.localStorage.getItem('ncGameToken'),
-	          username: window.localStorage.getItem('ncUserName'),
-	          alias: window.localStorage.getItem('ncAlias'),
+	          userData: netchessData,
 	          move: {
-	            src: srcEl.id.split('sq')[1],
+	            src:  srcEl.id.split('sq')[1],
 	            dest: this.id.split('sq')[1]
 	          }
 	        };
@@ -511,8 +509,7 @@
 	            method: 'POST',
 	            data: JSON.stringify(data),
 	        }).done(function(data) {
-	            console.log(JSON.parse(Object.keys(data)[0]));  
-	            // why this? problem in express.js json middleware on server
+	            // wait for player 2's response move
 	        });
 	        console.log('drop');
 	    }

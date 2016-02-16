@@ -4,12 +4,24 @@ var PORT = 5000,
     http = require('http'),
     express = require('express'),
     app = express(),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    EE = require('events').EventEmitter;
 
 var gamesTable = require('./gamesTable');
 
+var move = {
+  src: null,
+  dst: null,
+  emitter: new EE()
+};
+
+
 var hackParse = function(obj) {
     return JSON.parse(Object.keys(obj)[0]);
+};
+
+var pprint = function(obj) {
+    return JSON.stringify(obj,null,2);
 };
 
 // GET request handlers
@@ -63,7 +75,7 @@ app
     var resData = {
       alias: reqData.alias,
       player: reqData.player,
-      gameToken: token 
+      token: token 
     };
     res.json(resData);
 
@@ -90,7 +102,7 @@ app
     var resData = {
         player: reqData.player,
         alias:  reqData.alias,
-        token:  reqData.gameToken
+        token:  reqData.token
     };
     res.json(resData);
 
@@ -98,18 +110,23 @@ app
 .post('/update', function(req, res) {
     res.setHeader("Access-Control-Allow-Origin","http://localhost:5000");
     console.log('/update');
-    // figure out why bodyParser.json() results in an empty body, and
-    // why this puts the stringified object into the object as a key with no value.
-    var data = hackParse(req.body);
-    var moveData = data.move;
-    var gameToken = data.gameToken;
-    var player = data.player; 
-    var alias = data.alias;
-    console.log('post: ', moveData);
 
-    // insert long polling of type application/json here instead of an immediate response
-    res.writeHead(200,{'Content-type':'application/json'}); 
-    return res.end(JSON.stringify(req.body));
+    var reqData = hackParse(req.body);
+    if (reqData.longpolling) {
+        console.log('long polling');
+        move.emitter.on('change', function(){
+            console.log('move data change event!');
+            res.json(JSON.stringify(move));
+        });
+        console.log('sent %s',  JSON.stringify(reqData));
+    } else {
+        move.src = reqData.moveData.src;
+        move.dst = reqData.moveData.dst;
+        move.emitter.emit('change');
+        console.log('updated move data to src: %s dst: %s', move.src, move.dst);
+        res.json({msg:'success'});
+    }
+
 });
 
 http.createServer(app).listen(PORT, function() {

@@ -113,9 +113,7 @@ module.exports = exports = (function() {
         completeMove(srcEl, this);
 
         var netchessData = JSON.parse(window.localStorage.getItem('netchess-data'));
-        console.log(netchessData);
         var data = {
-          // fix this: parse 'netchess-data' object in local storage instead
           userData: netchessData,
           move: {
             src:  srcEl.id.split('sq')[1],
@@ -128,8 +126,7 @@ module.exports = exports = (function() {
             method: 'POST',
             data: JSON.stringify(data),
         }).done(function(data) {
-            console.log(JSON.parse(Object.keys(data)[0]));  
-            // this is a workaround for express.js json middleware issue on server ?
+            // wait for player 2's response move
         });
         console.log('drop');
     }
