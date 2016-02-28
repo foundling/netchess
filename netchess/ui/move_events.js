@@ -117,7 +117,7 @@ module.exports = exports = (function() {
           userData: netchessData,
           move: {
             src:  srcEl.id.split('sq')[1],
-            dest: this.id.split('sq')[1]
+            dst: this.id.split('sq')[1]
           }
         };
 
@@ -126,7 +126,7 @@ module.exports = exports = (function() {
             method: 'POST',
             data: JSON.stringify(data),
         }).done(function(data) {
-            // wait for player 2's response move
+            // wait for other player's response move
         });
         console.log('drop');
     }

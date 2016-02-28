@@ -46,7 +46,6 @@
 
 	'use strict';
 	var app = __webpack_require__(1);
-	var events = __webpack_require__(8);
 
 
 /***/ },
@@ -59,6 +58,7 @@
 	var Player = __webpack_require__(3);
 	var Board = __webpack_require__(4);
 	var GameEngine = __webpack_require__(5);
+	var events = __webpack_require__(8);
 
 
 /***/ },
@@ -500,7 +500,7 @@
 	          userData: netchessData,
 	          move: {
 	            src:  srcEl.id.split('sq')[1],
-	            dest: this.id.split('sq')[1]
+	            dst: this.id.split('sq')[1]
 	          }
 	        };
 
@@ -509,7 +509,7 @@
 	            method: 'POST',
 	            data: JSON.stringify(data),
 	        }).done(function(data) {
-	            // wait for player 2's response move
+	            // wait for other player's response move
 	        });
 	        console.log('drop');
 	    }

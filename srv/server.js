@@ -120,8 +120,8 @@ app
         });
         console.log('sent %s',  JSON.stringify(reqData));
     } else {
-        move.src = reqData.moveData.src;
-        move.dst = reqData.moveData.dst;
+        move.src = reqData.move.src;
+        move.dst = reqData.move.dst;
         move.emitter.emit('change');
         console.log('updated move data to src: %s dst: %s', move.src, move.dst);
         res.json({msg:'success'});
