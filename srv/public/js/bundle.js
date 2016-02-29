@@ -389,13 +389,13 @@
 
 	  var move = {
 	     src: null,
-	     dest: null,
+	     dst: null,
 	  };
 	  /*********************/
 	  /* UTILITY FUNCTIONS */
 	  /*********************/
 
-	  var isValidMove = function(srcEl, destEl) {  
+	  var isValidMove = function(srcEl, dstEl) {  
 	      return true; 
 	  };
 
@@ -413,24 +413,21 @@
 	      return !!getPieceName(el).length; 
 	  };
 
-	  var handleCollision = function(srcEl, destEl) {
+	  var handleCollision = function(srcEl, dstEl) {
 
 	  };
 
-	  var movePiece = function(srcEl, destEl) {
-	      // k= swp4p =
-	      var tempAttributes = {};
-	      if (isPiece(destEl)) {
-	          handleCollision(srcEl, destEl);
-	          var pieceName = getPieceName(el);
-	      }
+	  var movePiece = function(srcSquare, dstSquare) {
+	      var srcEl = $('#sq' + srcSquare);
+	      var dstEl = $('#sq' + dstSquare);
+	      completeMove(srcEl,dstEl);
 	  }; 
 
 	  var swapPieceForBlank = function() {
 
 	  }; 
 
-	  var completeMove = function(srcEl, destEl){
+	  var completeMove = function(srcEl, dstEl){
 	    
 	    var newClass = getPieceName(srcEl);
 
@@ -439,26 +436,27 @@
 	    }
 
 	    $(srcEl).removeClass(newClass);
-	    $(destEl).addClass(newClass);
+	    $(dstEl).addClass(newClass);
 
-	    removeDragClasses(srcEl,this);
+	    removeDragClasses(srcEl,dstEl);
 	  };
 
-	  var cancelMove = function(srcEl, destEl) {
+	  var cancelMove = function(srcEl, dstEl) {
 	    
-	    $(destEl).removeClass('over');
+	    $(dstEl).removeClass('over');
 	    $(srcEl).removeClass('being-dragged');
 
 	  };
 
-	  var removeDragClasses = function(srcEl,destEl) {
-	    $(destEl).removeClass('over');    
+	  var removeDragClasses = function(srcEl,dstEl) {
+	    $(dstEl).removeClass('over');    
 	    $(srcEl).removeClass('being-dragged');    
 	  };
 
 	  /******************/
 	  /* Event Handlers */
 	  /******************/
+
 
 	  var dragStart = function(ev) {
 	    if (!isPiece(this)) {
@@ -486,30 +484,61 @@
 	    console.log('dragleave');
 	  };
 
+	  /* initial player 2 polling */
+	  if (JSON.parse(window.localStorage.getItem('netchess-data')).player === 'player2') {
+	      $.ajax({
+
+	          url:    '/update',
+	          method: 'POST',
+	          data:   JSON.stringify({
+	              userData: JSON.parse(window.localStorage.getItem('netchess-data')),
+	              init: true,
+	              move: {
+	                src:  null,
+	                dst:  null
+	              }
+	          })
+
+	      }).done(function(res) {
+	          var moveData = JSON.parse(res);
+	          // wait for other player's response move
+	          console.log('update board with this information: ', moveData.src, moveData.dst);
+	          movePiece(moveData.src,moveData.dst);
+	      });
+	  }
+
 	  var drop = function(ev) {
+	    var moveData;
+
 	    ev.stopPropagation();
 	    
 	    if ( !isValidMove(srcEl, this) ) {
 	        cancelMove(srcEl, this);
 	    }
 	    else {
+
 	        completeMove(srcEl, this);
 
-	        var netchessData = JSON.parse(window.localStorage.getItem('netchess-data'));
-	        var data = {
-	          userData: netchessData,
+	        moveData = {
+	          userData: JSON.parse(window.localStorage.getItem('netchess-data')),
 	          move: {
 	            src:  srcEl.id.split('sq')[1],
-	            dst: this.id.split('sq')[1]
-	          }
+	            dst:  this.id.split('sq')[1]
+	          },
+	          longpolling: true,
 	        };
 
 	        $.ajax({
-	            url: '/update',
+
+	            url:    '/update',
 	            method: 'POST',
-	            data: JSON.stringify(data),
-	        }).done(function(data) {
+	            data:   JSON.stringify(moveData),
+
+	        }).done(function(res) {
+	            var moveData = JSON.parse(res);
 	            // wait for other player's response move
+	            console.log('update board with this information: ', moveData.src, moveData.dst);
+	            movePiece(moveData.src,moveData.dst);
 	        });
 	        console.log('drop');
 	    }

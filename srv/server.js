@@ -7,7 +7,10 @@ var PORT = 5000,
     bodyParser = require('body-parser'),
     EE = require('events').EventEmitter;
 
+
 var gamesTable = require('./gamesTable');
+
+var connections = null;
 
 var move = {
   src: null,
@@ -112,21 +115,27 @@ app
     console.log('/update');
 
     var reqData = hackParse(req.body);
-    if (reqData.longpolling) {
-        console.log('long polling');
-        move.emitter.on('change', function(){
-            console.log('move data change event!');
-            res.json(JSON.stringify(move));
-        });
-        console.log('sent %s',  JSON.stringify(reqData));
+
+    if (reqData.init && reqData.userData.player === 'player2') { 
+        console.log('player2 init');
+        connections = [res];
+        console.log('num connections on init: ',connections.length);
     } else {
+        // add this request to front of queue
+        connections.splice(0,0,res);
+        // update the move
         move.src = reqData.move.src;
         move.dst = reqData.move.dst;
+        // emit the change event 
         move.emitter.emit('change');
-        console.log('updated move data to src: %s dst: %s', move.src, move.dst);
-        res.json({msg:'success'});
     }
+});
 
+move.emitter.on('change', function(){
+    res = connections.pop();
+    console.log('move: ',move);
+    res.json(JSON.stringify(move));
+    console.log('num connections on update: ',connections.length);
 });
 
 http.createServer(app).listen(PORT, function() {

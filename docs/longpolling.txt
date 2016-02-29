@@ -1,0 +1,9 @@
+player 1 moves a piece
+  'drop' event sends the src and dest piece info to the server at /update
+  the server looks at the info and determines that player one has made a move
+  it tells player2 the src and dst information about player1's move. 
+  player 2 updates the board. 
+  when player 2 moves, the cycle repeats with player2's data as the moveData.
+
+
+ 
