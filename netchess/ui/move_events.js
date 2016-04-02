@@ -2,18 +2,18 @@ module.exports = exports = (function() {
 
   var $ = require('jquery'),
       squares = $('.square'),
-      srcEl = null;
+      srcEl = null,
+      move = {
+        src: null,
+        dst: null,
+      };
 
-  var move = {
-     src: null,
-     dst: null,
-  };
   /*********************/
   /* UTILITY FUNCTIONS */
   /*********************/
 
-  var isValidMove = function(srcEl, dstEl) {  
-      return true; 
+  var isValidMove = function(srcEl, dstEl) {
+      return true;
   };
 
   var getPieceName = function(el) {
@@ -27,7 +27,7 @@ module.exports = exports = (function() {
   };
 
   var isPieceAlt = function(el) {
-      return !!getPieceName(el).length; 
+      return !!getPieceName(el).length;
   };
 
   var handleCollision = function(srcEl, dstEl) {
@@ -38,14 +38,14 @@ module.exports = exports = (function() {
       var srcEl = $('#sq' + srcSquare);
       var dstEl = $('#sq' + dstSquare);
       completeMove(srcEl,dstEl);
-  }; 
+  };
 
   var swapPieceForBlank = function() {
 
-  }; 
+  };
 
   var completeMove = function(srcEl, dstEl){
-    
+
     var newClass = getPieceName(srcEl);
 
     if (!newClass) {
@@ -59,35 +59,50 @@ module.exports = exports = (function() {
   };
 
   var cancelMove = function(srcEl, dstEl) {
-    
+
     $(dstEl).removeClass('over');
     $(srcEl).removeClass('being-dragged');
 
   };
 
   var removeDragClasses = function(srcEl,dstEl) {
-    $(dstEl).removeClass('over');    
-    $(srcEl).removeClass('being-dragged');    
+    $(dstEl).removeClass('over');
+    $(srcEl).removeClass('being-dragged');
   };
+
+  /*************************/
+  /* Custom Event Emitters */
+  /*************************/
+
+  var playerMove = new CustomEvent('move');
+  // when a player moves, they trigger this so the game engine can receive it, figure out which player it is,
+  // and then return true or false as a validation value.  that value is then used to determine if the
+  // drag and drop animations take effect or not. 
+
 
   /******************/
   /* Event Handlers */
   /******************/
 
 
+  var playerMoved = function(e) {
+      var playerNumber = Array.prototype.filter.call(e.target.classList, function(class) {
+          return (/player/.test(class));
+      })[0];
+  }
   var dragStart = function(ev) {
     if (!isPiece(this)) {
       ev.preventDefault();
       return false;
     } else {
       srcEl = this;
-      $(ev.target).addClass('being-dragged');  
+      $(ev.target).addClass('being-dragged');
       console.log('dragstart');
     }
   };
 
   var dragEnter = function(ev) {
-    $(this).addClass('over');  
+    $(this).addClass('over');
     console.log('dragenter');
   };
 
@@ -97,7 +112,7 @@ module.exports = exports = (function() {
   };
 
   var dragLeave = function(ev) {
-    $(ev.target).removeClass('over');  
+    $(ev.target).removeClass('over');
     console.log('dragleave');
   };
 
@@ -128,7 +143,7 @@ module.exports = exports = (function() {
     var moveData;
 
     ev.stopPropagation();
-    
+
     if ( !isValidMove(srcEl, this) ) {
         cancelMove(srcEl, this);
     }

@@ -47,6 +47,16 @@ function prop(obj, key, options) {
     return (obj[key]) ? ' piece-' + obj[key] : '';
 }
 
+function whichPlayer(obj, key, options) {
+    var player;
+
+    if (obj[key]) {
+        player = (obj[key][0] === 'w') ? 'player1' : 'player2';
+    }
+
+    return player || '';
+}
+
 function range(max, options) {
   var rv = "";
 
@@ -81,7 +91,7 @@ function rowEnd(squareNumber, options) {
 }
 
 
-[prop, range, rowNum, rowStart, rowEnd].forEach(function(f) {
+[prop, range, rowNum, rowStart, rowEnd, whichPlayer].forEach(function(f) {
     h.registerHelper(f.name,f);
 });
 

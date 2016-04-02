@@ -17,7 +17,10 @@
             <div class="row" id="row{{rowNum ../this}}">
             {{/rowStart}}
 
-                <div draggable="true" id="sq{{this}}" class="square{{prop ../this this}}"></div>
+                <div 
+                draggable="true" 
+                id="sq{{this}}" 
+                class="square{{prop ../this this}} {{whichPlayer ../this this}}"></div>
 
             {{#rowEnd this}}
             </div>

@@ -58,7 +58,6 @@
 	var Player = __webpack_require__(3);
 	var Board = __webpack_require__(4);
 	var GameEngine = __webpack_require__(5);
-	var events = __webpack_require__(8);
 
 
 /***/ },
@@ -146,6 +145,7 @@
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	var RuleEngine = __webpack_require__(7); 
+	var moveEvents = __webpack_require__(8);
 
 	var GameEngine = function(board, player1, player2) {
 	  // duties:  
@@ -163,10 +163,6 @@
 
 	  this.ruleEngine = new RuleEngine();
 	  this.board = board;
-	};
-
-	GameEngine.prototype.setup = function() {
-	      this.board.initBoard();
 	};
 
 	GameEngine.prototype.getNextMove = function() {

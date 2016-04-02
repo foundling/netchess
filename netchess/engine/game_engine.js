@@ -18,10 +18,10 @@ var GameEngine = function(board, player1, player2) {
 
   this.ruleEngine = new RuleEngine();
   this.board = board;
-};
-
-GameEngine.prototype.setup = function() {
-      this.board.initBoard();
+  this.addEventListener('move', function() {
+      console.log('move request');
+  });
+  }; 
 };
 
 GameEngine.prototype.getNextMove = function() {
