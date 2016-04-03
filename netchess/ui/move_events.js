@@ -1,3 +1,6 @@
+var RuleEngine = require('./../engine/rule_engine');
+var ruleEngine = new RuleEngine();
+
 module.exports = exports = (function() {
 
   var $ = require('jquery'),
@@ -13,7 +16,12 @@ module.exports = exports = (function() {
   /*********************/
 
   var isValidMove = function(srcEl, dstEl) {
-      return true;
+        var pieceType,
+            isValid;
+
+        ruleEngine.validate(pieceType, srcEl, dstEl);
+            
+        return true;
   };
 
   var getPieceName = function(el) {
@@ -147,8 +155,7 @@ module.exports = exports = (function() {
 
     if ( !isValidMove(srcEl, this) ) {
         cancelMove(srcEl, this);
-    }
-    else {
+    } else {
 
         completeMove(srcEl, this);
 

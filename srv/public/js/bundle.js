@@ -302,6 +302,13 @@
 
 	'use strict';
 
+	/*
+	 * Rule Engine:
+	 *
+	 * roll: validates a src to dst move for a given piece 
+	 *
+	 *
+	 */
 	var RuleEngine = function() {
 
 	  this.validators = {
@@ -373,12 +380,39 @@
 	  };
 	};
 
+	RuleEngine.prototype.validate = function(pieceType, src, dst) {
+	    // if some return false, it's false.
+	    var valid,
+	        startPos = parseInt(src.id.replace('sq','')),
+	        endPos = parseInt(dst.id.replace('sq',''));
+
+	    var startSquare = parseInt(src.id.replace('sq',''));
+	    var startX = startSquare % 8;;
+	    var startY = Math.floor(startSquare / 8) + 1;
+
+	    var endSquare = parseInt(dst.id.replace('sq',''));
+	    var endX = endSquare % 8;;
+	    var endY = Math.floor(endSquare / 8) + 1;
+	    console.log(endX,endY);
+
+	    /*
+	    valid = Object.keys(this.validators[pieceType]).every(function(funcName) {
+	        return this.validators[pieceType][funcName](startPos, endPos);
+	    });
+
+	    */
+	    return true;
+	};
+
 	module.exports = exports = RuleEngine;
 
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
+
+	var RuleEngine = __webpack_require__(7);
+	var ruleEngine = new RuleEngine();
 
 	module.exports = exports = (function() {
 
@@ -395,7 +429,12 @@
 	  /*********************/
 
 	  var isValidMove = function(srcEl, dstEl) {
-	      return true;
+	        var pieceType,
+	            isValid;
+
+	        ruleEngine.validate(pieceType, srcEl, dstEl);
+	            
+	        return true;
 	  };
 
 	  var getPieceName = function(el) {
@@ -529,8 +568,7 @@
 
 	    if ( !isValidMove(srcEl, this) ) {
 	        cancelMove(srcEl, this);
-	    }
-	    else {
+	    } else {
 
 	        completeMove(srcEl, this);
 
