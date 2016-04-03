@@ -21,7 +21,6 @@ var GameEngine = function(board, player1, player2) {
   this.addEventListener('move', function() {
       console.log('move request');
   });
-  }; 
 };
 
 GameEngine.prototype.getNextMove = function() {

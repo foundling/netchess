@@ -1,0 +1,50 @@
+body {
+    text-align: center;
+    padding: 50px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(50,50,50);
+}
+
+.new {
+
+}
+
+.join {
+
+}
+
+.resume {
+
+}
+
+.new,
+.join,
+.resume,
+.info {
+    width: 200px;
+    text-align: center;
+    margin: 20px auto;
+    padding: 20px;
+    display: block;
+    border: 3px solid black;
+    padding: 20px 80px;
+    border-radius: 15px;
+    transition: background 0.1s ease-in;
+}
+
+.new:hover,
+.join:hover,
+.resume:hover,
+.info:hover {
+    background: lightgreen;
+}
+
+h1,
+.new,
+.join,
+.resume,
+.info {
+    font-family: Helvetica Neue;

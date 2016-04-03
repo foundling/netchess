@@ -86,10 +86,11 @@ module.exports = exports = (function() {
 
 
   var playerMoved = function(e) {
-      var playerNumber = Array.prototype.filter.call(e.target.classList, function(class) {
-          return (/player/.test(class));
+      var playerNumber = Array.prototype.filter.call(e.target.classList, function(className) {
+          return (/player/.test(className));
       })[0];
-  }
+  };
+
   var dragStart = function(ev) {
     if (!isPiece(this)) {
       ev.preventDefault();

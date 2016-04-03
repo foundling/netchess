@@ -1,0 +1,61 @@
+body {
+    text-align: center;
+    margin-top: 75px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(50,50,50);
+}
+
+.new {
+
+}
+
+.join {
+
+}
+
+.resume {
+
+}
+
+input#alias,
+button#submit {
+    outline: none;
+    width: 200px;
+    text-align: center;
+    margin: 20px auto;
+    display: block;
+    border: 3px solid black;
+    padding: 20px; 
+    border-radius: 15px;
+    transition: background 0.3s ease-in;
+    font-size: 1.5em;
+}
+
+button#submit {
+    color:      rgb(50,50,50);
+    background: rgb(220,220,220);
+    transition: background 0.1s ease-in;
+}
+
+button#submit .valid:hover,
+button#submit .valid:focus {
+    background: lightgreen;
+    
+}
+
+.new:hover,
+.join:hover,
+.resume:hover,
+.info:hover {
+    background: lightgreen;
+}
+
+h1,
+.new,
+.join,
+.resume,
+.info {
+    font-family: Helvetica Neue;

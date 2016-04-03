@@ -1,7 +1,9 @@
 var gulp = require('gulp');
+var nodemon = require('gulp-nodemon');
 var concat = require('gulp-concat');
 var webpack = require('webpack-stream');
 var jsonlint = require('gulp-json-lint');
+
 
 gulp.task('jsonlint', function() {
   return gulp.src('package.json')
