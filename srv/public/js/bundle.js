@@ -314,25 +314,32 @@
 	  this.validators = {
 
 	    pawn: [
-	      function single(startPos, endPos) {
+	      function single(player, startPos, endPos) {
 	        var deltaX = endPos[0] - startPos[0];  
 	        var deltaY = endPos[1] - startPos[1];
-	        return deltaX === 0 && deltaY === 1;
+	        return (player === 'player1' && deltaX === 0 && deltaY === -1 ||
+	                player === 'player2' && deltaX === 0 && deltaY === 1);
 	      },
-	    /*
-	      function doubleStart(startPos, endPos) {
+	      function double(player,startPos, endPos) {
+	          
 	        var deltaX = endPos[0] - startPos[0];  
 	        var deltaY = endPos[1] - startPos[1];
-	        return deltaX === 0 && deltaY === 2;
-	      }*/,
-	      function capture(startPos, endPos) {
+	        console.log(deltaX,deltaY);
+	        return  player === 'player1' && startPos[1] !== 6 || // if pawn not moving from first position
+	                player === 'player2' && startPos[1] !== 1 || // then validate as true 
+	                player === 'player1' && deltaX === 0 && deltaY === -2 ||
+	                player === 'player2' && deltaX === 0 && deltaY === 2;
+	      },
+	/*
+	      function capture(player, startPos, endPos) {
 	        var deltaX = endPos[0] - startPos[0];  
 	        var deltaY = endPos[1] - startPos[1];
 	        return Math.abs(deltaX === 1) && deltaY === 1;
 	      }
+	*/
 	    ],
 	    knight: [
-	      function lShape(startPos, endPos) {
+	      function lShape(player, startPos, endPos) {
 	        var deltaX = Math.abs(endPos[0] - startPos[0]);
 	        var deltaY = Math.abs(endPos[1] - startPos[1]);
 	        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
@@ -341,7 +348,7 @@
 	    ],
 
 	    queen: [
-	      function straightLine(startPos, endPos) {
+	      function straightLine(player, startPos, endPos) {
 	        var startX = startPos[0];
 	        var startY = startPos[1];
 	        var endX = endPos[0];
@@ -349,7 +356,7 @@
 	        // do either the x coords or y coords remain the same? 
 	        return  (startX === endX) || (startY === endY);  
 	      },
-	      function diagonal(startPos, endPos) {
+	      function diagonal(player, startPos, endPos) {
 	        var deltaX = Math.abs(endPos[0] - startPos[0]);
 	        var deltaY = Math.abs(endPos[1] - startPos[1]);
 	        // is the absolute change in x the same as the absolute change in y?
@@ -358,7 +365,7 @@
 
 	    ],
 	    king: [
-	      function oneSpace(startPos, endPos) {
+	      function oneSpace(player, startPos, endPos) {
 	        var deltaX = Math.abs(startPos[0] - endPos[0]);
 	        var deltaY = Math.abs(startPos[1] - endPos[1]);
 	        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));       
@@ -369,8 +376,7 @@
 	  };
 	};
 
-	RuleEngine.prototype.validate = function(pieceType, src, dst) {
-	    console.log(pieceType);
+	RuleEngine.prototype.validate = function(player, pieceType, src, dst) {
 
 	    /* 
 	       takes in a pieceType, src and dst dom element.
@@ -382,18 +388,16 @@
 
 	    var startSquare = parseInt(src.id.replace('sq',''));
 	    var startX = startSquare % 8;
-	    var startY = Math.floor(startSquare / 8) + 1;
+	    var startY = Math.floor(startSquare / 8);
 
 	    var endSquare = parseInt(dst.id.replace('sq',''));
 	    var endX = endSquare % 8;
-	    var endY = Math.floor(endSquare / 8) + 1;
+	    var endY = Math.floor(endSquare / 8);
 
 	    var validatorFunctions = this.validators[pieceType];
 
 	    return validatorFunctions.every(function(func) {
-	        var result = func([startX, startY], [endX, endY]);
-	        console.log(result);
-	        return result;
+	        return func(player, [startX, startY], [endX, endY]);
 	    });
 	};
 
@@ -426,7 +430,11 @@
 	            return /piece-/.test(className);
 	        })[0].split('-').slice(-1).pop();
 
-	        return ruleEngine.validate(pieceType, srcEl, dstEl);
+	        var player = Array.prototype.filter.call(srcEl.classList, function(className) {
+	            return /player/.test(className);
+	        })[0];
+
+	        return ruleEngine.validate(player, pieceType, srcEl, dstEl);
 	  };
 
 	  var getPieceName = function(el) {

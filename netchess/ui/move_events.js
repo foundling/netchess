@@ -20,7 +20,11 @@ module.exports = exports = (function() {
             return /piece-/.test(className);
         })[0].split('-').slice(-1).pop();
 
-        return ruleEngine.validate(pieceType, srcEl, dstEl);
+        var player = Array.prototype.filter.call(srcEl.classList, function(className) {
+            return /player/.test(className);
+        })[0];
+
+        return ruleEngine.validate(player, pieceType, srcEl, dstEl);
   };
 
   var getPieceName = function(el) {
