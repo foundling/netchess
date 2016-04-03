@@ -16,12 +16,11 @@ module.exports = exports = (function() {
   /*********************/
 
   var isValidMove = function(srcEl, dstEl) {
-        var pieceType,
-            isValid;
+        var pieceType = Array.prototype.filter.call(srcEl.classList, function(className) {
+            return /piece-/.test(className);
+        })[0].split('-').slice(-1).pop();
 
-        ruleEngine.validate(pieceType, srcEl, dstEl);
-            
-        return true;
+        return ruleEngine.validate(pieceType, srcEl, dstEl);
   };
 
   var getPieceName = function(el) {
