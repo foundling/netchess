@@ -1,0 +1,1 @@
+integrate piece state into validation logic. e.g, if it's a pawn's first move, it can move 2 spaces.
