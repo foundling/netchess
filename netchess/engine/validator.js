@@ -7,9 +7,9 @@
  *
  *
  */
-var RuleEngine = function() {
+var ruleEngine = {
 
-  this.validators = {
+  validators: {
 
     pawn: [
       function single(player, startPos, endPos) {
@@ -71,10 +71,10 @@ var RuleEngine = function() {
         return (hypotenuse === 1) || (hypotenuse === Math.sqrt(2));
       }
     ]
-  };
+  }
 };
 
-RuleEngine.prototype.validate = function(player, pieceType, src, dst) {
+ruleEngine.validate = function(player, pieceType, src, dst) {
 
     /* 
        takes in a pieceType, src and dst dom element.
@@ -99,4 +99,4 @@ RuleEngine.prototype.validate = function(player, pieceType, src, dst) {
     });
 };
 
-module.exports = exports = RuleEngine;
+module.exports = exports = ruleEngine;

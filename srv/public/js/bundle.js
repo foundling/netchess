@@ -52,495 +52,114 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var Piece = __webpack_require__(2);
-	var Player = __webpack_require__(3);
-	var Board = __webpack_require__(4);
-	var GameEngine = __webpack_require__(5);
-	var moveEvents = __webpack_require__(8);
+	var events = __webpack_require__(2);
+	events.init();
 
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var Piece = function(name, position, pieceMoves){
-	  this.name = name;
-	  this.position = position;
-	  this.pieceMoves = pieceMoves;
-	  this.alive = true;
-	  this.next = function() {};
-	}; 
-
-
-
-	module.exports = exports = Piece;
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var Player = function(name, side, board) {
-
-	  this.name = name;
-	  this.side = side;
-	  this._board = board;
-	  this.pieces = {
-	    pawn:   8,   
-	    king:   1,
-	    queen:  1,
-	    bishop: 2,
-	    knight: 2,
-	    rook:   2,
-	  };
-	};
-
-	module.exports = exports = Player;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var Board = function(height, width) {
-
-	  this._board = new Array(height);
-	  for (var i = 0; i < height; i++) {
-	    this._board[i] = new Array(width);
-	  }
-	  this.height = height;
-	  this.width = width;
-	};
-
-	Board.prototype.setPiece = function(piece) {
-
-	  var x = piece.position[0],
-	      y = piece.position[1];
-
-	  this._board[x][y] = piece;
-
-	};
-
-	Board.prototype.getPiece = function(position) {
-	  var x = position[0],
-	      y = position[1];
-
-	  return this._board[x][y];    
-	};
-
-	module.exports = exports = Board;
-
-
-/***/ },
-/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	var $                   = __webpack_require__(3);
+	var isValidMove         = __webpack_require__(4).isValidMove;
+	var getPieceName        = __webpack_require__(4).getPieceName;
+	var isPiece             = __webpack_require__(4).isPiece;
+	var isPieceAlt          = __webpack_require__(4).isPieceAlt;
+	var handleCollision     = __webpack_require__(4).handleCollision;
+	var movePiece           = __webpack_require__(4).movePiece;
+	var completeMove        = __webpack_require__(4).completeMove;
+	var cancelMove          = __webpack_require__(4).cancelMove;
+	var removeDragClasses   = __webpack_require__(4).removeDragClasses;
+	var squares             = $('.square');
+	var srcEl               = null;
+	var move                = {src: null, dst: null};
 
-	var RuleEngine = __webpack_require__(7); 
+	var dragStart = function(ev) {
 
-	var GameEngine = function(board, player1, player2) {
-	  // duties:  
-	  // handle turns, ref the game (mark players dead, determine checkmate, reverse board on each turn)
+	  if (!isPiece(this)) {
 
-	  this.gameState = {
-	    whoseMove: player1.name,    
-	    gameOver: false,
-	    currentMove: {
-	      'from': null,
-	      'to': null
-	    },
-	    total : 0,
-	  };
+	    ev.preventDefault();
+	    return false;
 
-	  this.ruleEngine = new RuleEngine();
-	  this.board = board;
-	  this.addEventListener('move', function() {
-	      console.log('move request');
+	  } else {
+
+	    srcEl = this;
+	    $(ev.target).addClass('being-dragged');
+
+	  }
+	};
+
+	var dragEnter = function(ev) {
+	    $(this).addClass('over');
+	};
+
+	var dragOver = function(ev) {
+	    ev.preventDefault();
+	};
+
+	var dragLeave = function(ev) {
+	    $(ev.target).removeClass('over');
+	};
+
+
+
+	var drop = function(ev) {
+
+	    var moveData;
+	    ev.stopPropagation();
+
+	    if ( !isValidMove(srcEl, this) ) {
+
+	        cancelMove(srcEl, this);
+
+	    } else {
+
+	        completeMove(srcEl, this);
+
+	        moveData = {
+	          userData: JSON.parse(window.localStorage.getItem('netchess-data')),
+	          move: {
+	            src:  srcEl.id.split('sq')[1],
+	            dst:  this.id.split('sq')[1]
+	          },
+	          longpolling: true
+	        };
+
+	        $.ajax({
+
+	            url:    '/update',
+	            method: 'POST',
+	            data:   JSON.stringify(moveData)
+
+	        }).done(function(res) {
+
+	            var moveData = JSON.parse(res);
+	            movePiece(moveData.src,moveData.dst);
+
+	        });
+	    }
+	};
+
+	var bindEvents = function() {
+	  squares.each(function(index, square, array) {
+	    square.addEventListener('dragstart', dragStart);
+	    square.addEventListener('dragenter', dragEnter);
+	    square.addEventListener('dragover', dragOver);
+	    square.addEventListener('dragleave', dragLeave);
+	    square.addEventListener('drop', drop);
 	  });
 	};
 
-	GameEngine.prototype.getNextMove = function() {
-	    process.stdout.write(this.gameState.whoseMove + ': ');
-	    process.stdin.once('data', function(data) {
-	      var move,
-	          from,
-	          to;
-
-	      move = data.toString().split(' '); //input sample:  1,2 1,3
-	      from = move[0];
-	      to = move[1];
-	      this.gameState.currentMove = { from: from, to: to }; 
-	      this.mainLoop();
-	    }.bind(this));
-	};
-
-	GameEngine.prototype.refreshDisplay = function() {
-	  this.gameState.total++;
-	  console.log(this.board.toString());
-	  this.gameState.whoseMove = (this.gameState.whoseMove === 'player1') ? 'player2' : 'player1';
-	};
-
-	GameEngine.prototype.mainLoop = function() {
-	  if (this.gameState.total == 5) /*this.gameOver)*/ process.exit();
-	  this.refreshDisplay();
-	  this.getNextMove();
-	};
-
-	module.exports = exports = GameEngine;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = setTimeout(cleanUpNextTick);
-	    draining = true;
-
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    clearTimeout(timeout);
-	}
-
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
-	    }
-	};
-
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
 
 	/*
-	 * Rule Engine:
-	 *
-	 * roll: validates a src to dst move for a given piece 
-	 *
-	 *
+	   When a player moves, they trigger this so the game engine can receive it and figure out which player it is.
+	   The game engine then returns true or false, which determines whether the drag and drop happens or not. 
 	 */
-	var RuleEngine = function() {
 
-	  this.validators = {
+	var playerMove = new CustomEvent('move');
 
-	    pawn: [
-	      function single(player, startPos, endPos) {
-	        var deltaX = endPos[0] - startPos[0];  
-	        var deltaY = endPos[1] - startPos[1];
-	        return (player === 'player1' && deltaX === 0 && deltaY === -1 ||
-	                player === 'player2' && deltaX === 0 && deltaY === 1);
-	      },
-	      function double(player,startPos, endPos) {
-	          
-	        var deltaX = endPos[0] - startPos[0];  
-	        var deltaY = endPos[1] - startPos[1];
-	        console.log(deltaX,deltaY);
-	        return  player === 'player1' && startPos[1] !== 6 || // if pawn not moving from first position
-	                player === 'player2' && startPos[1] !== 1 || // then validate as true 
-	                player === 'player1' && deltaX === 0 && deltaY === -2 ||
-	                player === 'player2' && deltaX === 0 && deltaY === 2;
-	      },
-	/*
-	      function capture(player, startPos, endPos) {
-	        var deltaX = endPos[0] - startPos[0];  
-	        var deltaY = endPos[1] - startPos[1];
-	        return Math.abs(deltaX === 1) && deltaY === 1;
-	      }
-	*/
-	    ],
-	    knight: [
-	      function lShape(player, startPos, endPos) {
-	        var deltaX = Math.abs(endPos[0] - startPos[0]);
-	        var deltaY = Math.abs(endPos[1] - startPos[1]);
-	        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
-	        return hypotenuse === Math.sqrt(5);
-	      }
-	    ],
-
-	    queen: [
-	      function straightLine(player, startPos, endPos) {
-	        var startX = startPos[0];
-	        var startY = startPos[1];
-	        var endX = endPos[0];
-	        var endY = endPos[1];
-	        // do either the x coords or y coords remain the same? 
-	        return  (startX === endX) || (startY === endY);  
-	      },
-	      function diagonal(player, startPos, endPos) {
-	        var deltaX = Math.abs(endPos[0] - startPos[0]);
-	        var deltaY = Math.abs(endPos[1] - startPos[1]);
-	        // is the absolute change in x the same as the absolute change in y?
-	        return deltaX === deltaY;
-	      },
-
-	    ],
-	    king: [
-	      function oneSpace(player, startPos, endPos) {
-	        var deltaX = Math.abs(startPos[0] - endPos[0]);
-	        var deltaY = Math.abs(startPos[1] - endPos[1]);
-	        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));       
-	        console.log(deltaX,deltaY,hypotenuse);
-	        return (hypotenuse === 1) || (hypotenuse === Math.sqrt(2));
-	      }
-	    ]
-	  };
-	};
-
-	RuleEngine.prototype.validate = function(player, pieceType, src, dst) {
-
-	    /* 
-	       takes in a pieceType, src and dst dom element.
-	       gets the pieceType from the dst element
-	       takes the square number from src and dst id's 
-	       converts square numbers to x,y coordinates, and validates by piece type
-	       on src and dst x,y coords 
-	    */
-
-	    var startSquare = parseInt(src.id.replace('sq',''));
-	    var startX = startSquare % 8;
-	    var startY = Math.floor(startSquare / 8);
-
-	    var endSquare = parseInt(dst.id.replace('sq',''));
-	    var endX = endSquare % 8;
-	    var endY = Math.floor(endSquare / 8);
-
-	    var validatorFunctions = this.validators[pieceType];
-
-	    return validatorFunctions.every(function(func) {
-	        return func(player, [startX, startY], [endX, endY]);
-	    });
-	};
-
-	module.exports = exports = RuleEngine;
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var RuleEngine = __webpack_require__(7);
-	var ruleEngine = new RuleEngine();
-
-	module.exports = exports = (function() {
-
-	  var $ = __webpack_require__(9),
-	      squares = $('.square'),
-	      srcEl = null,
-	      move = {
-	        src: null,
-	        dst: null,
-	      };
-
-	  /*********************/
-	  /* UTILITY FUNCTIONS */
-	  /*********************/
-
-	  var isValidMove = function(srcEl, dstEl) {
-	        var pieceType = Array.prototype.filter.call(srcEl.classList, function(className) {
-	            return /piece-/.test(className);
-	        })[0].split('-').slice(-1).pop();
-
-	        var player = Array.prototype.filter.call(srcEl.classList, function(className) {
-	            return /player/.test(className);
-	        })[0];
-
-	        return ruleEngine.validate(player, pieceType, srcEl, dstEl);
-	  };
-
-	  var getPieceName = function(el) {
-	    return $.grep($(el).attr('class').split(' '), function(v){
-	      return /piece-/.test(v);
-	    })[0];
-	  };
-
-	  var isPiece = function(el) {
-	    return getPieceName(el).length ? true : false;
-	  };
-
-	  var isPieceAlt = function(el) {
-	      return !!getPieceName(el).length;
-	  };
-
-	  var handleCollision = function(srcEl, dstEl) {
-
-	  };
-
-	  var movePiece = function(srcSquare, dstSquare) {
-	      var srcEl = $('#sq' + srcSquare);
-	      var dstEl = $('#sq' + dstSquare);
-	      completeMove(srcEl,dstEl);
-	  };
-
-	  var swapPieceForBlank = function() {
-
-	  };
-
-	  var completeMove = function(srcEl, dstEl){
-
-	    var newClass = getPieceName(srcEl);
-
-	    if (!newClass) {
-	      console.log('something went wrong at the drop-swap event');
-	    }
-
-	    $(srcEl).removeClass(newClass);
-	    $(dstEl).addClass(newClass);
-
-	    removeDragClasses(srcEl,dstEl);
-	  };
-
-	  var cancelMove = function(srcEl, dstEl) {
-
-	    $(dstEl).removeClass('over');
-	    $(srcEl).removeClass('being-dragged');
-
-	  };
-
-	  var removeDragClasses = function(srcEl,dstEl) {
-	    $(dstEl).removeClass('over');
-	    $(srcEl).removeClass('being-dragged');
-	  };
-
-	  /*************************/
-	  /* Custom Event Emitters */
-	  /*************************/
-
-	  var playerMove = new CustomEvent('move');
-	  // when a player moves, they trigger this so the game engine can receive it, figure out which player it is,
-	  // and then return true or false as a validation value.  that value is then used to determine if the
-	  // drag and drop animations take effect or not. 
-
-
-	  /******************/
-	  /* Event Handlers */
-	  /******************/
-
-
-	  var playerMoved = function(e) {
-	      var playerNumber = Array.prototype.filter.call(e.target.classList, function(className) {
-	          return (/player/.test(className));
-	      })[0];
-	  };
-
-	  var dragStart = function(ev) {
-	    if (!isPiece(this)) {
-	      ev.preventDefault();
-	      return false;
-	    } else {
-	      srcEl = this;
-	      $(ev.target).addClass('being-dragged');
-	      console.log('dragstart');
-	    }
-	  };
-
-	  var dragEnter = function(ev) {
-	    $(this).addClass('over');
-	    console.log('dragenter');
-	  };
-
-	  var dragOver = function(ev) {
-	    ev.preventDefault();
-	    console.log('dragover');
-	  };
-
-	  var dragLeave = function(ev) {
-	    $(ev.target).removeClass('over');
-	    console.log('dragleave');
-	  };
-
-	  /* initial player 2 polling */
-	  if (JSON.parse(window.localStorage.getItem('netchess-data')).player === 'player2') {
-	      $.ajax({
+	var longPoll = function() {
+	     $.ajax({
 
 	          url:    '/update',
 	          method: 'POST',
@@ -555,61 +174,29 @@
 
 	      }).done(function(res) {
 	          var moveData = JSON.parse(res);
-	          // wait for other player's response move
-	          console.log('update board with this information: ', moveData.src, moveData.dst);
 	          movePiece(moveData.src,moveData.dst);
 	      });
-	  }
+	};
 
-	  var drop = function(ev) {
-	    var moveData;
-
-	    ev.stopPropagation();
-
-	    if ( !isValidMove(srcEl, this) ) {
-	        cancelMove(srcEl, this);
-	    } else {
-
-	        completeMove(srcEl, this);
-
-	        moveData = {
-	          userData: JSON.parse(window.localStorage.getItem('netchess-data')),
-	          move: {
-	            src:  srcEl.id.split('sq')[1],
-	            dst:  this.id.split('sq')[1]
-	          },
-	          longpolling: true,
-	        };
-
-	        $.ajax({
-
-	            url:    '/update',
-	            method: 'POST',
-	            data:   JSON.stringify(moveData),
-
-	        }).done(function(res) {
-	            var moveData = JSON.parse(res);
-	            // wait for other player's response move
-	            console.log('update board with this information: ', moveData.src, moveData.dst);
-	            movePiece(moveData.src,moveData.dst);
-	        });
-	        console.log('drop');
+	var initPlayerTwoLongPoll = function () {
+	    var ncData = JSON.parse(window.localStorage.getItem('netchess-data'));
+	    if (ncData.player  && ncData.player=== 'player2') {
+	        longPoll();
 	    }
-	  };
+	};
 
-	  squares.each(function(s) {
-	    this.addEventListener('dragstart', dragStart);
-	    this.addEventListener('dragenter', dragEnter);
-	    this.addEventListener('dragover', dragOver);
-	    this.addEventListener('dragleave', dragLeave);
-	    this.addEventListener('drop', drop);
-	  });
+	var init = function() { 
+	    initPlayerTwoLongPoll();
+	    bindEvents();
+	};
 
-	}());
+	module.exports = exports = {
+	    init: init
+	};
 
 
 /***/ },
-/* 9 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10454,6 +10041,188 @@
 
 	return jQuery;
 	}));
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(3);
+	var validator = __webpack_require__(5);
+
+	var event_utils = module.exports = exports = {
+
+	  isValidMove: function(srcEl, dstEl) {
+	        var pieceType = Array.prototype.filter.call(srcEl.classList, function(className) {
+	            return /piece-/.test(className);
+	        })[0].split('-').slice(-1).pop();
+
+	        var player = Array.prototype.filter.call(srcEl.classList, function(className) {
+	            return /player/.test(className);
+	        })[0];
+
+	        return validator.validate(player, pieceType, srcEl, dstEl);
+	  },
+
+	  getPieceName: function(el) {
+	    return $.grep($(el).attr('class').split(' '), function(v){
+	      return /piece-/.test(v);
+	    })[0];
+	  },
+
+	  isPiece: function(el) {
+	    return event_utils.getPieceName(el).length ? true : false;
+	  },
+
+	  isPieceAlt: function(el) {
+	      return !!event_utils.getPieceName(el).length;
+	  },
+
+	  handleCollision: function(srcEl, dstEl) {
+
+	  },
+
+	  movePiece: function(srcSquare, dstSquare) {
+	      var srcEl = $('#sq' + srcSquare);
+	      var dstEl = $('#sq' + dstSquare);
+	      completeMove(srcEl,dstEl);
+	  },
+
+	  completeMove: function(srcEl, dstEl){
+
+	    var newClass = event_utils.getPieceName(srcEl);
+
+	    if (!newClass) {
+	      console.log('something went wrong at the drop-swap event');
+	    }
+
+	    $(srcEl).removeClass(newClass);
+	    $(dstEl).addClass(newClass);
+
+	    event_utils.removeDragClasses(srcEl,dstEl);
+	  },
+
+	  cancelMove: function(srcEl, dstEl) {
+
+	    $(dstEl).removeClass('over');
+	    $(srcEl).removeClass('being-dragged');
+
+	  },
+
+	  removeDragClasses: function(srcEl,dstEl) {
+	    $(dstEl).removeClass('over');
+	    $(srcEl).removeClass('being-dragged');
+	  }
+
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	/*
+	 * Rule Engine:
+	 *
+	 * roll: validates a src to dst move for a given piece 
+	 *
+	 *
+	 */
+	var ruleEngine = {
+
+	  validators: {
+
+	    pawn: [
+	      function single(player, startPos, endPos) {
+	        var deltaX = endPos[0] - startPos[0];  
+	        var deltaY = endPos[1] - startPos[1];
+	        return (player === 'player1' && deltaX === 0 && deltaY === -1 ||
+	                player === 'player2' && deltaX === 0 && deltaY === 1);
+	      },
+	      function double(player,startPos, endPos) {
+	          
+	        var deltaX = endPos[0] - startPos[0];  
+	        var deltaY = endPos[1] - startPos[1];
+	        console.log(deltaX,deltaY);
+	        return  player === 'player1' && startPos[1] !== 6 || // if pawn not moving from first position
+	                player === 'player2' && startPos[1] !== 1 || // then validate as true 
+	                player === 'player1' && deltaX === 0 && deltaY === -2 ||
+	                player === 'player2' && deltaX === 0 && deltaY === 2;
+	      },
+	/*
+	      function capture(player, startPos, endPos) {
+	        var deltaX = endPos[0] - startPos[0];  
+	        var deltaY = endPos[1] - startPos[1];
+	        return Math.abs(deltaX === 1) && deltaY === 1;
+	      }
+	*/
+	    ],
+	    knight: [
+	      function lShape(player, startPos, endPos) {
+	        var deltaX = Math.abs(endPos[0] - startPos[0]);
+	        var deltaY = Math.abs(endPos[1] - startPos[1]);
+	        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+	        return hypotenuse === Math.sqrt(5);
+	      }
+	    ],
+
+	    queen: [
+	      function straightLine(player, startPos, endPos) {
+	        var startX = startPos[0];
+	        var startY = startPos[1];
+	        var endX = endPos[0];
+	        var endY = endPos[1];
+	        // do either the x coords or y coords remain the same? 
+	        return  (startX === endX) || (startY === endY);  
+	      },
+	      function diagonal(player, startPos, endPos) {
+	        var deltaX = Math.abs(endPos[0] - startPos[0]);
+	        var deltaY = Math.abs(endPos[1] - startPos[1]);
+	        // is the absolute change in x the same as the absolute change in y?
+	        return deltaX === deltaY;
+	      },
+
+	    ],
+	    king: [
+	      function oneSpace(player, startPos, endPos) {
+	        var deltaX = Math.abs(startPos[0] - endPos[0]);
+	        var deltaY = Math.abs(startPos[1] - endPos[1]);
+	        var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));       
+	        console.log(deltaX,deltaY,hypotenuse);
+	        return (hypotenuse === 1) || (hypotenuse === Math.sqrt(2));
+	      }
+	    ]
+	  }
+	};
+
+	ruleEngine.validate = function(player, pieceType, src, dst) {
+
+	    /* 
+	       takes in a pieceType, src and dst dom element.
+	       gets the pieceType from the dst element
+	       takes the square number from src and dst id's 
+	       converts square numbers to x,y coordinates, and validates by piece type
+	       on src and dst x,y coords 
+	    */
+
+	    var startSquare = parseInt(src.id.replace('sq',''));
+	    var startX = startSquare % 8;
+	    var startY = Math.floor(startSquare / 8);
+
+	    var endSquare = parseInt(dst.id.replace('sq',''));
+	    var endX = endSquare % 8;
+	    var endY = Math.floor(endSquare / 8);
+
+	    var validatorFunctions = this.validators[pieceType];
+
+	    return validatorFunctions.every(function(func) {
+	        return func(player, [startX, startY], [endX, endY]);
+	    });
+	};
+
+	module.exports = exports = ruleEngine;
 
 
 /***/ }
