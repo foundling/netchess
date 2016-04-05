@@ -1,5 +1,5 @@
 var $ = require('jquery');
-var validator = require('../engine/validator');
+var validator = require('./engine/validator');
 
 var event_utils = module.exports = exports = {
 

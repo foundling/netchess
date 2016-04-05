@@ -97,6 +97,7 @@ var bindEvents = function() {
 var playerMove = new CustomEvent('move');
 
 var longPoll = function() {
+    console.log('long poll');
      $.ajax({
 
           url:    '/update',

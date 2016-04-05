@@ -159,6 +159,7 @@
 	var playerMove = new CustomEvent('move');
 
 	var longPoll = function() {
+	    console.log('long poll');
 	     $.ajax({
 
 	          url:    '/update',
@@ -10085,7 +10086,7 @@
 	  movePiece: function(srcSquare, dstSquare) {
 	      var srcEl = $('#sq' + srcSquare);
 	      var dstEl = $('#sq' + dstSquare);
-	      completeMove(srcEl,dstEl);
+	      event_utils.completeMove(srcEl,dstEl);
 	  },
 
 	  completeMove: function(srcEl, dstEl){

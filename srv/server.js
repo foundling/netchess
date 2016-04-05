@@ -1,4 +1,5 @@
 #!/usr/bin/node
+'use strict';
 
 var PORT = 5000,
     http = require('http'),
@@ -132,7 +133,7 @@ app
 });
 
 move.emitter.on('change', function(){
-    res = connections.pop();
+    var res = connections.pop();
     console.log('move: ',move);
     res.json(JSON.stringify(move));
     console.log('num connections on update: ',connections.length);
