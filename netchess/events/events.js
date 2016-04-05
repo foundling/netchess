@@ -1,9 +1,9 @@
 var $                   = require('jquery');
-var isValidMove         = require('./event_utils').isValidMove;
 var getPieceName        = require('./event_utils').getPieceName;
 var isPiece             = require('./event_utils').isPiece;
 var isPieceAlt          = require('./event_utils').isPieceAlt;
 var handleCollision     = require('./event_utils').handleCollision;
+var isValidMove         = require('./event_utils').isValidMove;
 var movePiece           = require('./event_utils').movePiece;
 var completeMove        = require('./event_utils').completeMove;
 var cancelMove          = require('./event_utils').cancelMove;
@@ -14,6 +14,7 @@ var move                = {src: null, dst: null};
 
 var dragStart = function(ev) {
 
+  ev.dataTransfer.setData('text/plain','');
   if (!isPiece(this)) {
 
     ev.preventDefault();

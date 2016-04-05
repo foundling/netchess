@@ -61,11 +61,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var $                   = __webpack_require__(3);
-	var isValidMove         = __webpack_require__(4).isValidMove;
 	var getPieceName        = __webpack_require__(4).getPieceName;
 	var isPiece             = __webpack_require__(4).isPiece;
 	var isPieceAlt          = __webpack_require__(4).isPieceAlt;
 	var handleCollision     = __webpack_require__(4).handleCollision;
+	var isValidMove         = __webpack_require__(4).isValidMove;
 	var movePiece           = __webpack_require__(4).movePiece;
 	var completeMove        = __webpack_require__(4).completeMove;
 	var cancelMove          = __webpack_require__(4).cancelMove;
@@ -76,6 +76,8 @@
 
 	var dragStart = function(ev) {
 
+	    console.log(ev);
+	  ev.dataTransfer.setData('text/plain','');
 	  if (!isPiece(this)) {
 
 	    ev.preventDefault();
