@@ -1,41 +1,28 @@
 'use strict';
 
-/*
- * Rule Engine:
- *
- * roll: validates a src to dst move for a given piece 
- *
- *
- */
-var ruleEngine = {
 
-  validators: {
+var rules = {
 
     pawn: [
+
       function single(player, startPos, endPos) {
         var deltaX = endPos[0] - startPos[0];  
         var deltaY = endPos[1] - startPos[1];
         return (player === 'player1' && deltaX === 0 && deltaY === -1 ||
                 player === 'player2' && deltaX === 0 && deltaY === 1);
       },
+
       function double(player,startPos, endPos) {
           
         var deltaX = endPos[0] - startPos[0];  
         var deltaY = endPos[1] - startPos[1];
-        console.log(deltaX,deltaY);
         return  player === 'player1' && startPos[1] !== 6 || // if pawn not moving from first position
                 player === 'player2' && startPos[1] !== 1 || // then validate as true 
                 player === 'player1' && deltaX === 0 && deltaY === -2 ||
                 player === 'player2' && deltaX === 0 && deltaY === 2;
       },
-/*
-      function capture(player, startPos, endPos) {
-        var deltaX = endPos[0] - startPos[0];  
-        var deltaY = endPos[1] - startPos[1];
-        return Math.abs(deltaX === 1) && deltaY === 1;
-      }
-*/
     ],
+
     knight: [
       function lShape(player, startPos, endPos) {
         var deltaX = Math.abs(endPos[0] - startPos[0]);
@@ -67,14 +54,12 @@ var ruleEngine = {
         var deltaX = Math.abs(startPos[0] - endPos[0]);
         var deltaY = Math.abs(startPos[1] - endPos[1]);
         var hypotenuse = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));       
-        console.log(deltaX,deltaY,hypotenuse);
         return (hypotenuse === 1) || (hypotenuse === Math.sqrt(2));
       }
     ]
-  }
 };
 
-ruleEngine.validate = function(player, pieceType, src, dst) {
+var validate = function(player, pieceType, src, dst) {
 
     /* 
        takes in a pieceType, src and dst dom element.
@@ -99,4 +84,6 @@ ruleEngine.validate = function(player, pieceType, src, dst) {
     });
 };
 
-module.exports = exports = ruleEngine;
+module.exports = exports = {
+    validate: validate
+};
