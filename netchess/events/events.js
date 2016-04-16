@@ -4,6 +4,10 @@ var validator           = require('../engine/validator');
 var gameEngine          = require('../engine/game_engine');
 var isValidMove = function() {return true;};
 
+// long polling functions
+var longPollStart       = require('./long_poll').longPollStart;
+var longPollUpdate      = require('./long_poll').longPollUpdate;
+
 // UI-related code
 var $                   = require('jquery');
 var squares             = $('.square');
@@ -29,15 +33,13 @@ var srcEl = null;
 var dragStart = function(ev) {
     ev.dataTransfer.setData('text/plain','');
 
-    srcEl = ev.target;
-    if (!isPiece(srcEl)) {
+    if (!isPiece(ev.target)) {
         ev.preventDefault();
+        ev.stopPropagation();
         return false;
     }
 
-    var player = getPlayer(srcEl);
-    gameEngine.itsYourTurn(player);
-    // parse player from srcEl, pass to game_engine
+    srcEl = ev.target;
     $(ev.target).addClass('being-dragged');
 
 };
@@ -53,8 +55,6 @@ var dragOver = function(ev) {
 var dragLeave = function(ev) {
     $(ev.target).removeClass('over');
 };
-
-
 
 var drop = function(ev) {
 

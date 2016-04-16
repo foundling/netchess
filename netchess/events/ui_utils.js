@@ -1,3 +1,5 @@
+'use strict';
+
 var $ = require('jquery');
 
 var ui_utils = module.exports = exports = {
@@ -9,11 +11,11 @@ var ui_utils = module.exports = exports = {
     getPieceName: function(el) {
         return $.grep($(el).attr('class').split(' '), function(v){
             return /piece-/.test(v);
-        })[0];
+        })[0] || '';
     },
 
     isPiece: function(el) {
-        return ui_utils.getPieceName(el).length ? true : false;
+        return ui_utils.getPieceName(el).length;
     },
 
     movePiece: function(srcSquare, dstSquare) {
@@ -21,6 +23,7 @@ var ui_utils = module.exports = exports = {
         var dstEl = $('#sq' + dstSquare);
         ui_utils.completeMove(srcEl,dstEl);
     },
+
     completeMove: function(srcEl, dstEl){
 
         var newClass = ui_utils.getPieceName(srcEl);
